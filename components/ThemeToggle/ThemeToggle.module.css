@@ -1,0 +1,28 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--muted);
+}
+
+.sun {
+  display: none;
+}
+
+:global([data-theme="dark"]) .moon {
+  display: none;
+}
+
+:global([data-theme="dark"]) .sun {
+  display: block;
+}

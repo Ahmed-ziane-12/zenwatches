@@ -1,0 +1,5 @@
+.svg {
+  display: block;
+  /* Dial lettering inherits this through the <use> shadow tree. */
+  font-family: var(--font-body), system-ui, sans-serif;
+}

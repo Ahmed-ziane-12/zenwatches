@@ -1,0 +1,83 @@
+/* Design tokens. Light is the default; the navbar switch sets data-theme="dark" on <html>. */
+:root,
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --fg: #0d1a14;
+  --muted: #55655d;
+  --line: #d3ddd6;
+  --tile: #f3f3f3;
+  --tile-hi: #fbfdfb;
+  --accent: #7a5a14;
+  --accent-ink: #fbf6e9;
+  --overlay: rgba(13, 26, 20, 0.4);
+  --shadow: 0 12px 40px rgba(13, 26, 20, 0.16);
+  --color-sand: #F6F6F3;
+  --color-cream: #F6F0E4;
+  --color-gold-deep: #a17a35;   
+  --color-night: #1c2420; 
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b1310;
+  --surface: #121d17;
+  --fg: #eef1ec;
+  --muted: #9aa89f;
+  --line: #24332b;
+  --tile: #14201a;
+  --tile-hi: #1f3128;
+  --accent: #c9a45c;
+  --accent-ink: #17120a;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --color-sand: #252d29;
+  --color-cream: #3c3c3c;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
