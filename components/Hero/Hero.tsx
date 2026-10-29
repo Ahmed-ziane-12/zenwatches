@@ -12,7 +12,7 @@ export default function Hero({ columns }: { columns: Product[][] }) {
         <section>
           <p className={styles.eyebrow}>Delivery to all 69 wilayas</p>
           <h1 className={styles.title}>
-            Find your next watch <span className={styles.time}>for less.</span>.
+            Find your next watch <span className={styles.time}>for less.</span>.<span className={styles.time}>.</span>
           </h1>
           <p className={styles.lede}>
             Browse the collection, pick your watch and order in a few minutes.

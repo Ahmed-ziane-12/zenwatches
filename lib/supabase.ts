@@ -1,7 +1,6 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-// Server-only: importing this file from a client component fails the build, so the key can never reach the browser.
 // SUPABASE_URL and SUPABASE_ANON_KEY come from .env.local (see .env.local.example).
 
 let client: SupabaseClient | null = null;

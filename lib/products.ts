@@ -97,7 +97,7 @@ const SAMPLE_ART: [ModelId, ColorwayId][] = [
   ["field", "black"], ["chrono", "steelWhite"], ["dress", "steelNavy"], ["cushion", "green"], ["diver", "steelWhite"],
 ];
 
-/** Fifteen made-up watches for working on the page before the database is connected. */
+/** Fifteen made-up watches for working on the page before the database is connected or when it fails. */
 export function sampleProducts(): Product[] {
   return SAMPLE_ART.map(([model, cw]) => ({
     id: `sample-${model}-${cw}`,

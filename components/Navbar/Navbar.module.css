@@ -1,11 +1,17 @@
 .header {
-  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  box-shadow: 0px 5px 14px #0000001a;
+  transition: background-color 0.2s ease;
+  /* border-bottom: 1px solid var(--line); */
 }
 
 .nav {
   max-width: 1240px;
   margin-inline: auto;
-  padding-block: 14px;
+  /* padding-block: 14px; */
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: flex;
