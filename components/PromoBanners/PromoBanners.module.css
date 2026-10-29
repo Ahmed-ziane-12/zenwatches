@@ -3,7 +3,7 @@
   margin-inline: auto;
   display: grid;
   gap: 1rem;
-  padding-block: 2.5rem;
+  padding: 1rem 2.5rem;
 }
 
 .banner {
