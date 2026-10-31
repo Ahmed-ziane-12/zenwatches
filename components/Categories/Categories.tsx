@@ -1,24 +1,29 @@
+"use client";
+
 import React from 'react'
 import styles from './Categories.module.css'
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '@/components/LanguageProvider';
 
 const TILES = [
-  { label: "Men's Watches", href: "/shop/category/mens", image: "/images/men.avif" },
-  { label: "Women's Watches", href: "/shop/category/womens", image: "/images/women.avif" },
-  { label: "Smart Watches", href: "/shop/category/smart", image: "/images/smart.avif" },
-  { label: "Watch Accessories", href: "/shop/category/accessories", image: "/images/accessories.avif" },
-  { label: "Luxury Brands", href: "/shop/collection/luxury", image: "/images/luxury.avif" },
+  { labelKey: "categories.mens", href: "/shop/category/mens", image: "/images/men.avif" },
+  { labelKey: "categories.womens", href: "/shop/category/womens", image: "/images/women.avif" },
+  { labelKey: "categories.smart", href: "/shop/category/smart", image: "/images/smart.avif" },
+  { labelKey: "categories.accessories", href: "/shop/category/accessories", image: "/images/accessories.avif" },
+  { labelKey: "categories.luxury", href: "/shop/collection/luxury", image: "/images/luxury.avif" },
 ];
 
 
 const Categories = () => {
+  const { t } = useLanguage();
+
   return (
     <section className={styles.categories}>
         <div className={styles.sectionTitle}>
-        <h2>Shop by Category</h2>
+        <h2>{t("categories.title")}</h2>
         <Link href="/shop/category" className={styles.exploreLink}>
-          Explore All <ArrowRight size={15} />
+          {t("categories.exploreAll")} <ArrowRight size={15} />
         </Link>
       </div>
       <div className={styles.tilesContainer}>
@@ -35,7 +40,7 @@ const Categories = () => {
                         />
                     </div>
                     <div className={styles.tileFooter}>
-                        <span className={styles.tileLabel}>{tile.label}</span>
+                        <span className={styles.tileLabel}>{t(tile.labelKey as any)}</span>
                         <ArrowUpRight size={15} className={styles.tileArrow} />
                     </div>
                 </Link>

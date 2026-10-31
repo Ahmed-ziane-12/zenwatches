@@ -11,6 +11,7 @@
   padding: 1.75rem;
   --tw-text-opacity: 1;
   color: white;
+  margin: 1.5rem 0;
 }
 
 
@@ -44,33 +45,67 @@
 }
 
 .contactForm{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
 }
 
 .contactInput,
 .contactTextarea{
-    width: 340px;
-    padding: .5rem 1rem;
-    background: transparent;
-    color: white;
-    outline: none;
-    border: 1px solid #24332b;
-    font: inherit;
-    color: inherit;
-    border-radius: .5rem;
+  width: 100%;
+  max-width: 340px;
+  padding: .5rem 1rem;
+  background: transparent;
+  color: white;
+  outline: none;
+  border: 1px solid #24332b;
+  font: inherit;
+  border-radius: .5rem;
 }
 
 .contactButton{
-    width: 340px;
-    padding: .5rem 1rem;
-    background: var(--accent);
-    color: white;
-    outline: none;
-    border: 1px solid #24332b;
-    font: inherit;
-    border-radius: .5rem;
+  width: 100%;
+  max-width: 340px;
+  padding: .5rem 1rem;
+  background: var(--accent);
+  color: white;
+  outline: none;
+  border: 1px solid #24332b;
+  font: inherit;
+  border-radius: .5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 1.25rem;
+    min-height: 200px;
+  }
+  .bannerImage {
+    width: 100%;
+    opacity: 0.4;
+  }
+  .heroGradient {
+    background: linear-gradient(
+      to top,
+      var(--color-night) 60%,
+      rgb(from var(--color-night) r g b / 80%) 80%,
+      transparent 100%
+    );
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+  .promoTitle {
+    font-size: 1.25rem;
+  }
+  .promoDescription {
+    font-size: 0.9rem;
+  }
 }

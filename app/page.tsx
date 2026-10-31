@@ -8,6 +8,7 @@ import Testimonials from "@/components/Testimonials/Testimonials";
 import TopBrands from "@/components/TopBrands/TopBrands";
 import { buildColumns, COLUMN_COUNT, sampleProducts, WATCHES_PER_COLUMN, type Product } from "@/lib/products";
 import { getRandomWatches, shuffle } from "@/lib/watches";
+import HomeClient from "@/components/HomeClient";
 
 // Pick a new random set on every visit. To reuse one set for a minute instead (fewer database
 // calls), replace this line with: export const revalidate = 60;
@@ -35,18 +36,15 @@ export default async function Home() {
   const watches = await loadHeroWatches();
   const bestSellers = await getRandomWatches(5);
   return (
-  <div className="wrapper">
-    <Hero columns={buildColumns(watches)} />
-    <Categories/>
-    <PromoBanners/>
-    <BestSellers products={bestSellers} />
-    <TopBrands/>
-    <Testimonials/>
-    <div style={{padding: "1rem 2.5rem", textAlign: "center"}}>
-      <h2>Special Treats For Our Special Customers</h2>
-      <LoyaltyCard purchases={0}/>
+    <div className="wrapper">
+      <Hero columns={buildColumns(watches)} />
+      <Categories />
+      <PromoBanners />
+      <BestSellers products={bestSellers} />
+      <TopBrands />
+      <Testimonials />
+      <HomeClient />
+      <Contact />
     </div>
-    <Contact/>
-
-  </div>);
+  );
 }

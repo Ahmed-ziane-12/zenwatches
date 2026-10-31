@@ -251,6 +251,21 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
+@media (max-width: 480px) {
+  .panel {
+    width: 100%;
+  }
+  .head {
+    padding: 16px 16px;
+  }
+  .list {
+    padding: 0 16px;
+  }
+  .foot {
+    padding: 16px 16px 20px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .overlay,
   .panel {

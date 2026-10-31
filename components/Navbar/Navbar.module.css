@@ -76,6 +76,58 @@
   margin-inline-start: auto;
 }
 
+.langWrapper {
+  position: relative;
+}
+
+.langButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+.langButton:hover {
+  border-color: var(--muted);
+}
+
+.langMenu {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  min-width: 80px;
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.langItem {
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: start;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.langItem:hover {
+  background: var(--line);
+}
+
 .cart {
   position: relative;
   display: inline-flex;

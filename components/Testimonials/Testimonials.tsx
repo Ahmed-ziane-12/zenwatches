@@ -3,12 +3,13 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import styles from "./Testimonials.module.css";
+import { useLanguage } from "@/components/LanguageProvider";
 
 type Review = {
   name: string;
   place: string;
   avatar: string;
-  text: string;
+  textKey: string;
 };
 
 // Sample reviews: replace with real customer feedback before launch.
@@ -17,35 +18,36 @@ const REVIEWS: Review[] = [
     name: "James Carter",
     place: "USA",
     avatar: "/tst1.avif",
-    text: "Amazing quality and fast delivery! The watch is even more beautiful in person. Highly recommend WatchShop.com.",
+    textKey: "testimonials.text1",
   },
   {
     name: "Emily Roberts",
     place: "UK",
     avatar: "/tst2.avif",
-    text: "Authentic products and excellent customer service. I've bought 3 watches already and every time it's been perfect!",
+    textKey: "testimonials.text2",
   },
   {
     name: "Ahmed Khan",
     place: "UAE",
     avatar: "/tst3.avif",
-    text: "Great prices and a smooth shopping experience. Will definitely shop again!",
+    textKey: "testimonials.text3",
   },
   {
     name: "Sofia Martinez",
     place: "Spain",
     avatar: "",
-    text: "My Seiko arrived beautifully packed with the box and papers. Exactly as described and a fair price.",
+    textKey: "testimonials.text4",
   },
 ];
 
 const CONTROLS = [
-  { dir: -1, Icon: ChevronLeft, label: "Previous reviews" },
-  { dir: 1, Icon: ChevronRight, label: "Next reviews" },
+  { dir: -1, Icon: ChevronLeft, labelKey: "testimonials.prev" },
+  { dir: 1, Icon: ChevronRight, labelKey: "testimonials.next" },
 ] as const;
 
 export default function Testimonials() {
   const trackRef = useRef<HTMLUListElement>(null);
+  const { t } = useLanguage();
 
   const scroll = (dir: -1 | 1) => {
     const el = trackRef.current;
@@ -59,16 +61,16 @@ export default function Testimonials() {
     <section className={styles.section}>
       <div className={styles.header}>
         <div>
-          <h2 className={styles.title}>What Our Customers Say</h2>
-          <p className={styles.subtitle}>Real stories from real watch lovers.</p>
+          <h2 className={styles.title}>{t("testimonials.title")}</h2>
+          <p className={styles.subtitle}>{t("testimonials.subtitle")}</p>
         </div>
         <div className={styles.controls}>
-          {CONTROLS.map(({ dir, Icon, label }) => (
+          {CONTROLS.map(({ dir, Icon, labelKey }) => (
             <button
               key={dir}
               type="button"
               onClick={() => scroll(dir)}
-              aria-label={label}
+              aria-label={t(labelKey as any)}
               className={styles.controlBtn}
             >
               <Icon size={17} />
@@ -85,7 +87,7 @@ export default function Testimonials() {
                 <Star key={i} size={14} className={styles.star} />
               ))}
             </div>
-            <p className={styles.text}>{r.text}</p>
+            <p className={styles.text}>{t(r.textKey as any)}</p>
             <div className={styles.author}>
               {r.avatar ? (
                 <img src={r.avatar} alt="" loading="lazy" className={styles.avatar} />

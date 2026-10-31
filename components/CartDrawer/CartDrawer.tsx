@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useCart } from "../CartProvider";
+import { useLanguage } from "../LanguageProvider";
 import ProductImage from "../ProductImage/ProductImage";
 import { formatPrice } from "@/lib/products";
 import styles from "./CartDrawer.module.css";
@@ -10,6 +11,7 @@ const FOCUSABLE = 'button:not([disabled]), a[href], input, [tabindex]:not([tabin
 
 export default function CartDrawer() {
   const { isOpen, close, items, count, subtotal, setQty, remove } = useCart();
+  const { t } = useLanguage();
   const panelRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -53,9 +55,9 @@ export default function CartDrawer() {
       <aside ref={panelRef} className={styles.panel} role="dialog" aria-modal="true" aria-labelledby="bag-title">
         <header className={styles.head}>
           <h2 id="bag-title" className={styles.title}>
-            Your bag <span className={styles.count}>{count}</span>
+            {t("cart.title")} <span className={styles.count}>{count}</span>
           </h2>
-          <button ref={closeRef} type="button" className={styles.close} onClick={close} aria-label="Close bag">
+          <button ref={closeRef} type="button" className={styles.close} onClick={close} aria-label={t("aria.closeMenu")}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
               <path d="M5 5l14 14M19 5L5 19" />
             </svg>
@@ -64,7 +66,7 @@ export default function CartDrawer() {
 
         {items.length === 0 ? (
           <div className={styles.empty}>
-            <p className={styles.emptyTitle}>Your bag is empty.</p>
+            <p className={styles.emptyTitle}>{t("cart.empty")}</p>
             <p className={styles.emptyText}>Pick a watch from the home page and it will show up here.</p>
             <button type="button" className={styles.secondary} onClick={close}>
               Keep browsing
@@ -93,7 +95,7 @@ export default function CartDrawer() {
                         </button>
                       </div>
                       <button type="button" className={styles.remove} onClick={() => remove(it.id)}>
-                        Remove
+                        {t("cart.remove")}
                       </button>
                     </div>
                   </div>
@@ -104,13 +106,13 @@ export default function CartDrawer() {
 
             <footer className={styles.foot}>
               <div className={styles.subtotal}>
-                <span>Subtotal</span>
+                <span>{t("cart.total")}</span>
                 <strong>{formatPrice(subtotal, items[0]?.currency)}</strong>
               </div>
               <p className={styles.fine}>Shipping and taxes are calculated at checkout.</p>
               {/* TODO: connect to your checkout (Stripe, Shopify, etc.). */}
               <button type="button" className={styles.checkout}>
-                Checkout
+                {t("cart.checkout")}
               </button>
             </footer>
           </>

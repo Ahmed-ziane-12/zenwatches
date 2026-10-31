@@ -101,11 +101,21 @@
 
 @media (min-width: 640px) {
   .categories {
-    max-width: 640px;
+    max-width: 100%;
   }
 
   .listItem {
-    width: 30%;
+    width: 40%;
+  }
+}
+
+@media (max-width: 639px) {
+  .listItem {
+    width: 60%;
+  }
+  .sectionTitle {
+    font-size: 1.1rem;
+    padding: 0.5rem 0.75rem;
   }
 }
 
