@@ -12,7 +12,7 @@ const body = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-body", displ
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Hourwright",
+  title: "Zen-Watches",
   description: "Automatic, hand-wound and quartz watches from independent makers.",
 };
 

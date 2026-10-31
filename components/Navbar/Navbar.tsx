@@ -37,7 +37,7 @@ export default function Navbar() {
           <li><a href="#">{t("nav.watches")}</a></li>
           <li><a href="#">{t("nav.straps")}</a></li>
           <li><a href="#">{t("nav.makers")}</a></li>
-          <li><a href="#">{t("nav.journal")}</a></li>
+          <li><a href="/help">{t("nav.journal")}</a></li>
         </ul>
 
         <Link className={styles.brand} href="/">
@@ -121,7 +121,7 @@ export default function Navbar() {
               </a>
             </li>
             <li role="menuitem">
-              <a href="#" onClick={() => setMenuOpen(false)}>
+              <a href="/help" onClick={() => setMenuOpen(false)}>
                 {t("nav.journal")}
               </a>
             </li>
