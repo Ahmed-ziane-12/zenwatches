@@ -35,9 +35,8 @@ export default function Navbar() {
 
         <ul className={styles.links}>
           <li><a href="#">{t("nav.watches")}</a></li>
-          <li><a href="#">{t("nav.straps")}</a></li>
-          <li><a href="#">{t("nav.makers")}</a></li>
-          <li><a href="/help">{t("nav.journal")}</a></li>
+          <li><a href="/makers">{t("nav.makers")}</a></li>
+          <li><a href="/help">{t("nav.help")}</a></li>
         </ul>
 
         <Link className={styles.brand} href="/">
@@ -112,17 +111,12 @@ export default function Navbar() {
             </li>
             <li role="menuitem">
               <a href="#" onClick={() => setMenuOpen(false)}>
-                {t("nav.straps")}
-              </a>
-            </li>
-            <li role="menuitem">
-              <a href="#" onClick={() => setMenuOpen(false)}>
                 {t("nav.makers")}
               </a>
             </li>
             <li role="menuitem">
               <a href="/help" onClick={() => setMenuOpen(false)}>
-                {t("nav.journal")}
+                {t("nav.help")}
               </a>
             </li>
           </ul>

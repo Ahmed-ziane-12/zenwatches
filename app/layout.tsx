@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   description: "Automatic, hand-wound and quartz watches from independent makers.",
 };
 
-// Runs before first paint so the saved theme never flashes. Light is the default.
-const themeScript = `try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}try{var l=localStorage.getItem("language")||"AR";document.documentElement.lang=l.toLowerCase();document.documentElement.dir=l==="AR"?"rtl":"ltr";}catch(e){}`;
+// Runs before first paint so saved preferences never flash.
+const themeScript = `try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light")}catch(e){}try{var l=localStorage.getItem("language");if(l==="AR"||l==="EN"||l==="FR"){document.documentElement.lang=l.toLowerCase();document.documentElement.dir=l==="AR"?"rtl":"ltr";}else{document.documentElement.lang="ar";document.documentElement.dir="rtl";}}catch(e){}`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

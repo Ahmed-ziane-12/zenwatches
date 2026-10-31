@@ -14,8 +14,10 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(undefine
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     try {
       const saved = localStorage.getItem("language");
       if (saved === "AR" || saved === "EN" || saved === "FR") {
@@ -27,6 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     try {
       localStorage.setItem("language", language);
     } catch (e) {
@@ -36,14 +39,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       document.documentElement.lang = language.toLowerCase();
       document.documentElement.dir = language === "AR" ? "rtl" : "ltr";
     }
-  }, [language]);
+  }, [language, mounted]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
   };
 
+  const currentLang = mounted ? language : DEFAULT_LANGUAGE;
+
   const t = (key: keyof (typeof translations)[Language], params?: Record<string, string | number>) => {
-    let text = translations[language][key] as string;
+    let text = translations[currentLang][key] as string;
     if (params) {
       Object.entries(params).forEach(([paramKey, value]) => {
         text = text.replace(`{${paramKey}}`, String(value));
@@ -52,10 +57,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return text;
   };
 
-  const dir = language === "AR" ? "rtl" : "ltr";
+  const dir = currentLang === "AR" ? "rtl" : "ltr";
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
+    <LanguageContext.Provider value={{ language: currentLang, setLanguage: setLanguageState, t, dir }}>
       {children}
     </LanguageContext.Provider>
   );

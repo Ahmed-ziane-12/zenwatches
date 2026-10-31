@@ -35,6 +35,8 @@
 .navLink {
   display: flex;
   align-items: center;
+  background-color: transparent;
+  border: none;
   gap: 0.5rem;
   padding: 0.625rem 0.75rem;
   border-radius: 8px;
