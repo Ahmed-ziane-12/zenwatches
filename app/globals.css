@@ -8,7 +8,8 @@
   --line: #d3ddd6;
   --tile: #f3f3f3;
   --tile-hi: #fbfdfb;
-  --accent: #674f1b;
+  --accent: #c9a45c;
+  --accent-trns: #c9a55c3f;
   --accent-ink: #fbf6e9;
   --overlay: rgba(13, 26, 20, 0.4);
   --shadow: 0 12px 40px rgba(13, 26, 20, 0.16);
@@ -16,11 +17,15 @@
   --color-cream: #F6F0E4;
   --color-gold-deep: #a17a35;   
   --color-night: #1c2420; 
+  --success: #4caf50;
+  --error: #f44336;
+  --warning: #ff9800;
+  --info: #2196f3;
   color-scheme: light;
 }
 
 :root[data-theme="dark"] {
-  --bg: #0b1310;
+  --bg: #121d17;
   --surface: #121d17;
   --fg: #eef1ec;
   --muted: #9aa89f;
@@ -72,6 +77,10 @@ ol {
 button {
   font: inherit;
   color: inherit;
+}
+
+.wrapper {
+  padding: 0 1rem;
 }
 
 :focus-visible {

@@ -1,0 +1,179 @@
+.section {
+  /* Map these to your site's design tokens */
+  --forest: #1f4d3a;
+  --gold: #c9a227;
+  --ink: #111827;
+
+  /* Replaces the global `container` utility: adjust to match your layout */
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: 2.5rem;
+  padding-top: 3rem;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: 3.5rem; /* md:pt-14 */
+  }
+}
+
+/* ---------- header ---------- */
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    margin-bottom: 1.75rem;
+  }
+}
+
+/* Replaces the global `section-title` utility: adjust to match your headings */
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--fg);
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.controlBtn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.controlBtn:hover {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: #fff;
+}
+
+/* ---------- track ---------- */
+
+.track {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- card ---------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 85%;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--bg);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 640px) {
+  .card {
+    width: calc((100% - 1.25rem) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    width: calc((100% - 2.5rem) / 3);
+  }
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  fill: var(--gold);
+  color: var(--gold);
+}
+
+.text {
+  flex: 1;
+  margin: 0.875rem 0 0;
+  font-size: 13px;
+  line-height: 1.625;
+  color: var(--fg);
+}
+
+/* ---------- author ---------- */
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.avatar,
+.avatarFallback {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+}
+
+.avatar {
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: grid;
+  place-items: center;
+  background: var(--forest);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.place {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}

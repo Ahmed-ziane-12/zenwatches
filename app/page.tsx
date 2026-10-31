@@ -1,6 +1,11 @@
+import BestSellers from "@/components/BestSellers/BestSellers";
 import Categories from "@/components/Categories/Categories";
+import Contact from "@/components/Contact/Contact";
 import Hero from "@/components/Hero/Hero";
+import LoyaltyCard from "@/components/LoyaltyCard/LoyaltyCard";
 import PromoBanners from "@/components/PromoBanners/PromoBanners";
+import Testimonials from "@/components/Testimonials/Testimonials";
+import TopBrands from "@/components/TopBrands/TopBrands";
 import { buildColumns, COLUMN_COUNT, sampleProducts, WATCHES_PER_COLUMN, type Product } from "@/lib/products";
 import { getRandomWatches, shuffle } from "@/lib/watches";
 
@@ -28,10 +33,20 @@ async function loadHeroWatches(): Promise<Product[]> {
 
 export default async function Home() {
   const watches = await loadHeroWatches();
+  const bestSellers = await getRandomWatches(5);
   return (
-  <>
+  <div className="wrapper">
     <Hero columns={buildColumns(watches)} />
     <Categories/>
     <PromoBanners/>
-  </>);
+    <BestSellers products={bestSellers} />
+    <TopBrands/>
+    <Testimonials/>
+    <div style={{padding: "1rem 2.5rem", textAlign: "center"}}>
+      <h2>Special Treats For Our Special Customers</h2>
+      <LoyaltyCard purchases={0}/>
+    </div>
+    <Contact/>
+
+  </div>);
 }

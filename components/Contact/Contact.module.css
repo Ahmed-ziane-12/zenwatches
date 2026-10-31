@@ -1,0 +1,76 @@
+
+.banner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 230px;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  --tw-text-opacity: 1;
+  color: white;
+}
+
+
+.bannerImage {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  z-index: -20;
+  height: 100%;
+  width: 68%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.heroGradient,
+.heroGradient1 {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+}
+
+.heroGradient{
+
+  background: linear-gradient(
+    to right,
+    var(--color-night) 34%,
+    rgb(from var(--color-night) r g b / 70%) 56%,
+    transparent 100%
+  );
+}
+
+.contactForm{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.contactInput,
+.contactTextarea{
+    width: 340px;
+    padding: .5rem 1rem;
+    background: transparent;
+    color: white;
+    outline: none;
+    border: 1px solid #24332b;
+    font: inherit;
+    color: inherit;
+    border-radius: .5rem;
+}
+
+.contactButton{
+    width: 340px;
+    padding: .5rem 1rem;
+    background: var(--accent);
+    color: white;
+    outline: none;
+    border: 1px solid #24332b;
+    font: inherit;
+    border-radius: .5rem;
+}
