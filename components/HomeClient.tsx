@@ -7,7 +7,7 @@ export default function HomeClient() {
   const { t } = useLanguage();
 
   return (
-    <div style={{ padding: "1rem 2.5rem", textAlign: "center" }}>
+    <div style={{ padding: "1rem 0", textAlign: "center", width: "100%" }}>
       <h2>{t("home.specialTreats")}</h2>
       <LoyaltyCard purchases={0} />
     </div>
