@@ -17,6 +17,7 @@
   --color-cream: #F6F0E4;
   --color-gold-deep: #a17a35;   
   --color-night: #1c2420; 
+  --card: #ffffff41;
   --success: #4caf50;
   --error: #f44336;
   --warning: #ff9800;
@@ -38,6 +39,7 @@
   --shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   --color-sand: #252d29;
   --color-cream: #3c3c3c;
+  --card: #00000041;
   color-scheme: dark;
 }
 

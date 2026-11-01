@@ -9,12 +9,15 @@ import Image from "next/image";
 import { ShoppingBag, Menu, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useAuth } from "../AuthProvider/AuthProvider";
+import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 
 const LANGUAGES = ["AR", "EN", "FR"] as const;
 
 export default function Navbar() {
   const { count, open } = useCart();
   const { language, setLanguage, t } = useLanguage();
+  const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
@@ -98,6 +101,11 @@ export default function Navbar() {
               {count}
             </span>
           </button>
+          {user ? (
+            <ProfileDropdown />
+          ) : (
+            <Link href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/signin`} className={styles.cart}>Sign In</Link>
+          )}
         </div>
       </nav>
 

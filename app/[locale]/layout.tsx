@@ -4,6 +4,7 @@ import { Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "../globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
+import { AuthProvider } from "@/components/AuthProvider/AuthProvider";
 import WatchSprite from "@/components/WatchSprite";
 import Navbar from "@/components/Navbar/Navbar";
 import CartDrawer from "@/components/CartDrawer/CartDrawer";
@@ -39,13 +40,13 @@ export default async function LocaleLayout({
     <html lang={lang} dir={dir} className={`${body.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         <LanguageProvider locale={locale}>
-          <CartProvider>
-            <WatchSprite />
-            <Navbar />
-            {children}
-            <Footer />
-            <CartDrawer />
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <WatchSprite />
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>
