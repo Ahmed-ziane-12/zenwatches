@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  min-height: calc(100vh - 200px);
+  background: var(--bg);
+}
+
+.sidebar {
+  width: 260px;
+  background: var(--card);
+  border-right: 1px solid var(--line);
+  padding: 1.5rem 0.75rem;
+}
+
+.sidebarHeader {
+  padding: 0 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1rem;
+}
+
+.sidebarTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.navLink:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.navLinkActive {
+  background: rgba(135, 206, 235, 0.1);
+  color: var(--text);
+}
+
+.navLinkActive:hover {
+  background: rgba(135, 206, 235, 0.15);
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 0.75rem;
+  }
+  
+  .sidebarHeader {
+    padding: 0 0.5rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .navLink {
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+  }
+  
+  .main {
+    padding: 1rem;
+  }
+}

@@ -68,8 +68,7 @@
 }
 
 * {
-  font-family: Supreme-Regular, 
-        Noto Kufi Arabic;
+  font-family:  Noto Kufi Arabic,Supreme-Regular;
   box-sizing: border-box;
   margin: 0;
   padding: 0;

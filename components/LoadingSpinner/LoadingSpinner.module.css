@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+}
+
+.spinner {
+  color: var(--accent);
+}
+
+.text {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
