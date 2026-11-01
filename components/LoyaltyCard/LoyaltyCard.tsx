@@ -1,5 +1,8 @@
+"use client";
+
 import type { CSSProperties } from "react";
 import styles from "./LoyaltyCard.module.css";
+import { useLanguage } from "@/components/LanguageProvider";
 
 type LoyaltyCardProps = {
   /** Purchases completed in the current cycle (0 to 4). */
@@ -41,9 +44,12 @@ function GiftIcon() {
 export default function LoyaltyCard({
   purchases,
   totalPurchases = 4,
-  title = "Loyalty Card",
-  giftLabel = "Free gift",
+  title,
+  giftLabel,
 }: LoyaltyCardProps) {
+  const { t } = useLanguage();
+  const cardTitle = title || t("loyalty.title");
+  const giftText = giftLabel || "Free gift";
   const completed = Math.max(0, Math.min(purchases, totalPurchases));
   const giftUnlocked = completed >= totalPurchases;
   const remaining = totalPurchases - completed;
@@ -56,11 +62,11 @@ export default function LoyaltyCard({
   return (
     <section
       className={`${styles.card} ${giftUnlocked ? styles.unlocked : ""}`}
-      aria-label={title}
+      aria-label={cardTitle}
     >
       <header className={styles.header}>
         <div>
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.title}>{cardTitle}</h3>
           <p className={styles.subtitle}>{subtitle}</p>
         </div>
         <span className={styles.badge}>
@@ -103,7 +109,7 @@ export default function LoyaltyCard({
             <GiftIcon />
           </div>
           <span className={`${styles.label} ${giftUnlocked ? styles.labelActive : ""}`}>
-            {giftLabel}
+            {giftText}
           </span>
         </div>
       </div>

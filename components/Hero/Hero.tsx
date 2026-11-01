@@ -1,21 +1,24 @@
+'use client'
 import type { Product } from "@/lib/products";
 import WatchColumns from "../WatchColumns/WatchColumns";
 import styles from "./Hero.module.css";
+import { useLanguage } from "../LanguageProvider";
 
 export default function Hero({ columns }: { columns: Product[][] }) {
   // With no watches to show (database empty or unreachable) the copy takes the full width.
   const hasWatches = columns.length > 0;
+  const { t } = useLanguage();
 
   return (
     <main className={styles.wrap}>
       <div className={`${styles.hero} ${hasWatches ? "" : styles.solo}`}>
         <section>
-          <p className={styles.eyebrow}>Delivery to all 69 wilayas</p>
+          <p className={styles.eyebrow}>{t('hero.delivery')}</p>
           <h1 className={styles.title}>
-            Find your next watch <span className={styles.time}>for less.</span>.<span className={styles.time}>.</span>
+            {t('hero.title')} <span className={styles.time}>{t('hero.title2')} </span>
           </h1>
           <p className={styles.lede}>
-            Browse the collection, pick your watch and order in a few minutes.
+            {t('hero.subtitle')}
           </p>
           <div className={styles.actions}>
             <a className={styles.btn} href="#">Shop watches</a>

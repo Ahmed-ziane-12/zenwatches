@@ -26,7 +26,8 @@ type Action =
   | { type: "load"; items: CartItem[] }
   | { type: "add"; product: Product }
   | { type: "setQty"; id: string; qty: number }
-  | { type: "remove"; id: string };
+  | { type: "remove"; id: string }
+  | { type: "clear" };
 
 interface CartContextValue {
   items: CartItem[];
@@ -35,6 +36,7 @@ interface CartContextValue {
   add: (product: Product) => void;
   setQty: (id: string, qty: number) => void;
   remove: (id: string) => void;
+  clear: () => void;
   isOpen: boolean;
   open: () => void;
   close: () => void;
@@ -46,6 +48,8 @@ function reducer(state: CartItem[], action: Action): CartItem[] {
   switch (action.type) {
     case "load":
       return action.items;
+    case "clear":
+      return [];
     case "add": {
       const found = state.some((i) => i.id === action.product.id);
       return found
@@ -71,7 +75,6 @@ function isCartItem(x: unknown): x is CartItem {
     typeof i.id === "string" &&
     typeof i.name === "string" &&
     typeof i.spec === "string" &&
-    typeof i.colorLabel === "string" &&
     typeof i.currency === "string" &&
     typeof i.price === "number" &&
     Number.isFinite(i.price) &&
@@ -126,6 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add: (product) => dispatch({ type: "add", product }),
       setQty: (id, qty) => dispatch({ type: "setQty", id, qty }),
       remove: (id) => dispatch({ type: "remove", id }),
+      clear: () => dispatch({ type: "clear" }),
       isOpen,
       open,
       close,

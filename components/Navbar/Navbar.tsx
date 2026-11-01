@@ -36,7 +36,7 @@ export default function Navbar() {
         <ul className={styles.links}>
           <li><a href="#">{t("nav.watches")}</a></li>
           <li><a href="/makers">{t("nav.makers")}</a></li>
-          <li><a href="/help">{t("nav.help")}</a></li>
+          <li><a href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/help`}>{t("nav.help")}</a></li>
         </ul>
 
         <Link className={styles.brand} href="/">
@@ -53,7 +53,7 @@ export default function Navbar() {
               aria-expanded={langOpen}
               aria-label={t("aria.selectLanguage")}
             >
-              <span>{language}</span>
+              <span suppressHydrationWarning>{language}</span>
               {langOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
             <AnimatePresence>
@@ -115,7 +115,7 @@ export default function Navbar() {
               </a>
             </li>
             <li role="menuitem">
-              <a href="/help" onClick={() => setMenuOpen(false)}>
+              <a href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/help`} onClick={() => setMenuOpen(false)}>
                 {t("nav.help")}
               </a>
             </li>

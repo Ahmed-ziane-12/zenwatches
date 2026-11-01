@@ -18,7 +18,7 @@ const ProductCard = ({ product}: ProductCardProps) => {
   return (
     
     <article className={styles.productCard}>
-      <Link href={`/products/${product.id}`} className={styles.productImage}>
+      <Link href={`/product/${product.id}`} className={styles.productImage}>
         <img src={product.imageUrl ? product.imageUrl : "/images/product.jpg"} alt="Product" />
       </Link>
       <div className={styles.productInfo}>

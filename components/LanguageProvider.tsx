@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { DEFAULT_LANGUAGE, translations, type Language } from "@/lib/translations";
+import { usePathname, useRouter } from "next/navigation";
+import { translations, type Language } from "@/lib/translations";
 
 type LanguageContextValue = {
   language: Language;
@@ -12,43 +13,33 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE);
-  const [mounted, setMounted] = useState(false);
+const localeToLang: Record<string, Language> = {
+  ar: "AR",
+  en: "EN",
+  fr: "FR",
+};
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const saved = localStorage.getItem("language");
-      if (saved === "AR" || saved === "EN" || saved === "FR") {
-        setLanguageState(saved);
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    try {
-      localStorage.setItem("language", language);
-    } catch (e) {
-      // ignore
-    }
-    if (typeof document !== "undefined") {
-      document.documentElement.lang = language.toLowerCase();
-      document.documentElement.dir = language === "AR" ? "rtl" : "ltr";
-    }
-  }, [language, mounted]);
+export function LanguageProvider({ children, locale }: { children: ReactNode; locale?: string }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const initialLang = locale ? (localeToLang[locale] || "AR") : "AR";
+  const [language, setLanguageState] = useState<Language>(initialLang);
 
   const setLanguage = (lang: Language) => {
+    const segments = pathname.split("/").filter(Boolean);
+    const newLocale = lang === "AR" ? "ar" : lang === "EN" ? "en" : "fr";
+    
+    if (segments[0] === "ar" || segments[0] === "en" || segments[0] === "fr") {
+      segments[0] = newLocale;
+    } else {
+      segments.unshift(newLocale);
+    }
+    router.push("/" + segments.join("/"));
     setLanguageState(lang);
   };
 
-  const currentLang = mounted ? language : DEFAULT_LANGUAGE;
-
   const t = (key: keyof (typeof translations)[Language], params?: Record<string, string | number>) => {
-    let text = translations[currentLang][key] as string;
+    let text = translations[language][key] as string;
     if (params) {
       Object.entries(params).forEach(([paramKey, value]) => {
         text = text.replace(`{${paramKey}}`, String(value));
@@ -57,10 +48,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return text;
   };
 
-  const dir = currentLang === "AR" ? "rtl" : "ltr";
+  const dir = language === "AR" ? "rtl" : "ltr";
 
   return (
-    <LanguageContext.Provider value={{ language: currentLang, setLanguage: setLanguageState, t, dir }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
       {children}
     </LanguageContext.Provider>
   );

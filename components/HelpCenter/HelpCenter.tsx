@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { BookOpen, Truck, RefreshCcw, Ruler, HelpCircle, ChevronDown, ChevronRight } from "lucide-react";
 import styles from "./HelpCenter.module.css";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const SECTIONS = [
   { id: "about", title: "About Us", icon: BookOpen },
@@ -22,6 +23,7 @@ const FAQS = [
 ];
 
 export default function HelpCenter() {
+  const { t } = useLanguage();
   const [activeSection, setActiveSection] = useState("about");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -38,7 +40,7 @@ export default function HelpCenter() {
       <aside className={styles.sidebar}>
         <div className={styles.sidebarTitle}>
           <BookOpen size={18} />
-          <span>Help Center</span>
+          <span>{t("nav.help")}</span>
         </div>
         <nav className={styles.nav}>
           {SECTIONS.map((section) => {
@@ -60,7 +62,7 @@ export default function HelpCenter() {
 
       <main className={styles.main}>
         <header className={styles.header}>
-          <h1 className={styles.headerTitle}>Help Center</h1>
+          <h1 className={styles.headerTitle}>{t("nav.help")}</h1>
           <p className={styles.headerSubtitle}>Everything you need to know about shopping with Hourwright</p>
         </header>
 

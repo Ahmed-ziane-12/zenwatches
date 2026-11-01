@@ -6,6 +6,8 @@ import { useLanguage } from "../LanguageProvider";
 import ProductImage from "../ProductImage/ProductImage";
 import { formatPrice } from "@/lib/products";
 import styles from "./CartDrawer.module.css";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const FOCUSABLE = 'button:not([disabled]), a[href], input, [tabindex]:not([tabindex="-1"])';
 
@@ -14,6 +16,14 @@ export default function CartDrawer() {
   const { t } = useLanguage();
   const panelRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || "ar";
+
+  const handleCheckout = () => {
+    close();
+    router.push(`/${locale}/checkout`);
+  };
 
   // While open: lock page scroll, focus the panel, close on Escape, keep Tab inside the panel.
   useEffect(() => {
@@ -111,7 +121,7 @@ export default function CartDrawer() {
               </div>
               <p className={styles.fine}>Shipping and taxes are calculated at checkout.</p>
               {/* TODO: connect to your checkout (Stripe, Shopify, etc.). */}
-              <button type="button" className={styles.checkout}>
+              <button type="button" className={styles.checkout} onClick={handleCheckout}>
                 {t("cart.checkout")}
               </button>
             </footer>

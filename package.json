@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
+    "geoalgeria": "^2.4.1",
     "lucide-react": "^1.62.0",
     "motion": "^14.9.0",
     "next": "^15.5.28",

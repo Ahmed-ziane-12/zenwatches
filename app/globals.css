@@ -41,7 +41,33 @@
   color-scheme: dark;
 }
 
+@font-face {
+    font-family: "Supreme-Regular";
+    src: url("/fonts/Supreme-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Wafir";
+    src: url("/fonts/Wafir-Light.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Noto Kufi Arabic";
+    src: url("/fonts/NotoKufiArabic-Regular.woff2") format("woff2");
+    font-weight: 300;
+    font-display: swap;
+    font-style: normal;
+}
+
 * {
+  font-family: Supreme-Regular, 
+        Noto Kufi Arabic;
   box-sizing: border-box;
   margin: 0;
   padding: 0;

@@ -37,6 +37,18 @@ export interface Product {
   colorLabel: string;
   imageUrl: string | null;
   art: Art;
+  // Unified fields for DB products
+  brand?: string | null;
+  description?: string | null;
+  images?: string[] | null;
+  image?: string | null;
+  movement?: string | null;
+  caseSize?: string | null;
+  waterResistance?: string | null;
+  specs?: Record<string, any> | null;
+  colors?: string[] | null;
+  availability?: string | null;
+  stock?: number | null;
 }
 
 /** Scroll settings for one hero column. `dur` is seconds per loop; `delay` offsets the start. */
@@ -113,3 +125,8 @@ export function sampleProducts(): Product[] {
 
 /** 42000 -> "42,000 DA". */
 export const formatPrice = (n: number, currency = "DA"): string => `${n.toLocaleString("en-US")} ${currency}`.trim();
+
+export async function getProductById(id: string): Promise<Product | null> {
+  const products = sampleProducts();
+  return products.find((p) => p.id === id) || null;
+}
