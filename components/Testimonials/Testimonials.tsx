@@ -82,7 +82,7 @@ export default function Testimonials() {
       <ul ref={trackRef} className={styles.track}>
         {REVIEWS.map((r) => (
           <li key={r.name} className={styles.card}>
-            <div className={styles.stars} role="img" aria-label="Rated 5 out of 5">
+            <div className={styles.stars} role="img" aria-label={t("testimonials.rated")}>
               {Array.from({ length: 5 }, (_, i) => (
                 <Star key={i} size={14} className={styles.star} />
               ))}

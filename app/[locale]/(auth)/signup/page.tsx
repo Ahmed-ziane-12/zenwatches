@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import styles from "../signin/auth.module.css";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function SignUpPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -23,7 +25,7 @@ export default function SignUpPage() {
     setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("auth.passwordsDontMatch"));
       return;
     }
 
@@ -43,7 +45,7 @@ export default function SignUpPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to sign up");
+        throw new Error(data.error || t("auth.failedSignUp"));
       }
 
       router.push(`/${locale}/signin`);
@@ -57,11 +59,11 @@ export default function SignUpPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Sign Up</h1>
+        <h1 className={styles.title}>{t("auth.signUp")}</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           {error && <div className={styles.error}>{error}</div>}
           <div className={styles.field}>
-            <label htmlFor="email" className={styles.label}>Email</label>
+            <label htmlFor="email" className={styles.label}>{t("auth.email")}</label>
             <input
               id="email"
               type="email"
@@ -72,7 +74,7 @@ export default function SignUpPage() {
             />
           </div>
           <div className={styles.field}>
-            <label htmlFor="username" className={styles.label}>Username</label>
+            <label htmlFor="username" className={styles.label}>{t("auth.username")}</label>
             <input
               id="username"
               type="text"
@@ -83,7 +85,7 @@ export default function SignUpPage() {
             />
           </div>
           <div className={styles.field}>
-            <label htmlFor="password" className={styles.label}>Password</label>
+            <label htmlFor="password" className={styles.label}>{t("auth.password")}</label>
             <input
               id="password"
               type="password"
@@ -94,7 +96,7 @@ export default function SignUpPage() {
             />
           </div>
           <div className={styles.field}>
-            <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
+            <label htmlFor="confirmPassword" className={styles.label}>{t("auth.confirmPassword")}</label>
             <input
               id="confirmPassword"
               type="password"
@@ -105,13 +107,13 @@ export default function SignUpPage() {
             />
           </div>
           <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? t("auth.signingUp") : t("auth.signUp")}
           </button>
         </form>
         <p className={styles.footer}>
-          Already have an account?{" "}
+          {t("auth.haveAccount")}{" "}
           <Link href={`/${locale}/signin`} className={styles.link}>
-            Sign In
+            {t("auth.signIn")}
           </Link>
         </p>
       </div>

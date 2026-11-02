@@ -49,15 +49,15 @@ export default function LoyaltyCard({
 }: LoyaltyCardProps) {
   const { t } = useLanguage();
   const cardTitle = title || t("loyalty.title");
-  const giftText = giftLabel || "Free gift";
+  const giftText = giftLabel || t("loyalty.freeGift");
   const completed = Math.max(0, Math.min(purchases, totalPurchases));
   const giftUnlocked = completed >= totalPurchases;
   const remaining = totalPurchases - completed;
   const progress = (completed / totalPurchases) * 100;
 
   const subtitle = giftUnlocked
-    ? "Your gift is ready. Enjoy!"
-    : `${remaining} more ${remaining === 1 ? "purchase" : "purchases"} to unlock your gift`;
+    ? t("loyalty.giftReady")
+    : t("loyalty.morePurchases", { count: remaining });
 
   return (
     <section
@@ -97,7 +97,7 @@ export default function LoyaltyCard({
               >
                 {done ? <CheckIcon /> : <BagIcon />}
               </div>
-              <span className={styles.label}>Purchase {i + 1}</span>
+              <span className={styles.label}>{t("loyalty.purchase", { n: i + 1 })}</span>
             </div>
           );
         })}

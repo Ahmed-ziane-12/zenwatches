@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./auth.module.css";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function SignInPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,7 +33,7 @@ export default function SignInPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to sign in");
+        throw new Error(data.error || t("auth.failedSignIn"));
       }
 
       // Store user in localStorage
@@ -53,11 +55,11 @@ export default function SignInPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Sign In</h1>
+        <h1 className={styles.title}>{t("auth.signIn")}</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           {error && <div className={styles.error}>{error}</div>}
           <div className={styles.field}>
-            <label htmlFor="email" className={styles.label}>Email</label>
+            <label htmlFor="email" className={styles.label}>{t("auth.email")}</label>
             <input
               id="email"
               type="email"
@@ -68,7 +70,7 @@ export default function SignInPage() {
             />
           </div>
           <div className={styles.field}>
-            <label htmlFor="password" className={styles.label}>Password</label>
+            <label htmlFor="password" className={styles.label}>{t("auth.password")}</label>
             <input
               id="password"
               type="password"
@@ -79,13 +81,13 @@ export default function SignInPage() {
             />
           </div>
           <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t("auth.signingIn") : t("auth.signIn")}
           </button>
         </form>
         <p className={styles.footer}>
-          Don't have an account?{" "}
+          {t("auth.noAccount")}{" "}
           <Link href={`/${locale}/signup`} className={styles.link}>
-            Sign Up
+            {t("auth.signUp")}
           </Link>
         </p>
       </div>

@@ -74,47 +74,47 @@ console.log(selectedImage);
       <div className={styles.container} style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--line)" }}>
           <h1 style={{ fontSize: "1.8rem", marginBottom: "1rem", color: "var(--text)" }}>{t("order.orderSuccess")}</h1>
-          <p style={{ marginBottom: "2rem", color: "var(--muted)" }}>Thank you for your order!</p>
+          <p style={{ marginBottom: "2rem", color: "var(--muted)" }}>{t("order.thankYou")}</p>
 
           <div style={{ textAlign: "left", marginBottom: "1.5rem", padding: "1rem", background: "var(--bg)", borderRadius: "8px" }}>
-            <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem", color: "var(--text)" }}>Order Details</h2>
+            <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem", color: "var(--text)" }}>{t("order.details")}</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Product</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.product")}</span>
                 <span style={{ color: "var(--text)" }}>{orderedProduct.name}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Quantity</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.quantity")}</span>
                 <span style={{ color: "var(--text)" }}>{formData.quantity}</span>
               </div>
               {formData.color && (
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ color: "var(--muted)" }}>Color</span>
+                  <span style={{ color: "var(--muted)" }}>{t("order.color")}</span>
                   <span style={{ color: "var(--text)" }}>{formData.color}</span>
                 </div>
               )}
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Name</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.name")}</span>
                 <span style={{ color: "var(--text)" }}>{formData.fullName}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Phone</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.phone")}</span>
                 <span style={{ color: "var(--text)" }}>{formData.phoneNumber}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Delivery</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.delivery")}</span>
                 <span style={{ color: "var(--text)" }}>{formData.deliveryType === "home" ? t("order.home") : t("order.stopDesk")}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid var(--line)" }}>
-                <span style={{ color: "var(--muted)" }}>Product Total</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.productTotal")}</span>
                 <span style={{ color: "var(--text)" }}>{productTotal.toLocaleString()} {orderedProduct.currency || "DA"}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--muted)" }}>Shipping</span>
+                <span style={{ color: "var(--muted)" }}>{t("order.shipping")}</span>
                 <span style={{ color: "var(--text)" }}>{shippingCost.toLocaleString()} {orderedProduct.currency || "DA"}</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid var(--line)", fontWeight: "bold" }}>
-                <span style={{ color: "var(--text)" }}>Total</span>
+                <span style={{ color: "var(--text)" }}>{t("order.total")}</span>
                 <span style={{ color: "var(--text)" }}>{formData.totalPrice.toLocaleString()} {orderedProduct.currency || "DA"}</span>
               </div>
             </div>
@@ -132,7 +132,7 @@ console.log(selectedImage);
               fontSize: "1rem",
             }}
           >
-            Continue Shopping
+            {t("order.continueShopping")}
           </button>
         </div>
       </div>

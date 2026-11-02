@@ -7,20 +7,20 @@ import styles from "./HelpCenter.module.css";
 import { useLanguage } from "@/components/LanguageProvider";
 
 const SECTIONS = [
-  { id: "about", title: "About Us", icon: BookOpen },
-  { id: "shipping", title: "Shipping Info", icon: Truck },
-  { id: "returns", title: "Returns & Exchanges", icon: RefreshCcw },
-  { id: "size", title: "Size Guide", icon: Ruler },
-  { id: "faq", title: "FAQ", icon: HelpCircle },
-];
+  { id: "about", titleKey: "help.section.about", icon: BookOpen },
+  { id: "shipping", titleKey: "help.section.shipping", icon: Truck },
+  { id: "returns", titleKey: "help.section.returns", icon: RefreshCcw },
+  { id: "size", titleKey: "help.section.size", icon: Ruler },
+  { id: "faq", titleKey: "help.section.faq", icon: HelpCircle },
+] as const;
 
 const FAQS = [
-  { question: "Question 1", answer: "This is a placeholder answer. Edit this later with your actual information." },
-  { question: "Question 2", answer: "This is a placeholder answer. Edit this later with your actual information." },
-  { question: "Question 3", answer: "This is a placeholder answer. Edit this later with your actual information." },
-  { question: "Question 4", answer: "This is a placeholder answer. Edit this later with your actual information." },
-  { question: "Question 5", answer: "This is a placeholder answer. Edit this later with your actual information." },
-];
+  { questionKey: "help.faq.q1", answerKey: "help.faq.a1" },
+  { questionKey: "help.faq.q2", answerKey: "help.faq.a2" },
+  { questionKey: "help.faq.q3", answerKey: "help.faq.a3" },
+  { questionKey: "help.faq.q4", answerKey: "help.faq.a4" },
+  { questionKey: "help.faq.q5", answerKey: "help.faq.a5" },
+] as const;
 
 export default function HelpCenter() {
   const { t } = useLanguage();
@@ -52,7 +52,7 @@ export default function HelpCenter() {
                 className={`${styles.navLink} ${activeSection === section.id ? styles.navLinkActive : ""}`}
               >
                 <Icon size={16} />
-                <span>{section.title}</span>
+                <span>{t(section.titleKey as any)}</span>
                 <ChevronRight size={14} style={{ marginLeft: "auto" }} />
               </button>
             );
@@ -63,7 +63,7 @@ export default function HelpCenter() {
       <main className={styles.main}>
         <header className={styles.header}>
           <h1 className={styles.headerTitle}>{t("nav.help")}</h1>
-          <p className={styles.headerSubtitle}>Everything you need to know about shopping with Hourwright</p>
+          <p className={styles.headerSubtitle}>{t("help.subtitle")}</p>
         </header>
 
         <motion.section
@@ -75,17 +75,11 @@ export default function HelpCenter() {
         >
           <div className={styles.sectionHeader}>
             <BookOpen size={24} />
-            <h2 className={styles.sectionTitle}>About Us</h2>
+            <h2 className={styles.sectionTitle}>{t("help.section.about")}</h2>
           </div>
           <div className={styles.sectionContent}>
-            <p>
-              Hourwright is your destination for carefully curated automatic, hand-wound and quartz watches from independent
-              makers. We believe in craftsmanship, timeless design, and honest service.
-            </p>
-            <p>
-              Our team sources pieces with character and provenance, backs them with clear policies, and helps you find a
-              watch you'll keep for years to come.
-            </p>
+            <p>{t("help.about.p1")}</p>
+            <p>{t("help.about.p2")}</p>
           </div>
         </motion.section>
 
@@ -98,16 +92,14 @@ export default function HelpCenter() {
         >
           <div className={styles.sectionHeader}>
             <Truck size={24} />
-            <h2 className={styles.sectionTitle}>Shipping Info</h2>
+            <h2 className={styles.sectionTitle}>{t("help.section.shipping")}</h2>
           </div>
           <div className={styles.sectionContent}>
             <ul className={styles.list}>
-              <li className={styles.listItem}>Orders are delivered within 1–2 working days.</li>
-              <li className={styles.listItem}>You will get a confirmation call once your order is placed then when your order ships.</li>
-              <li className={styles.listItem}>
-                Delivery is free above the threshold shown in your cart; a flat fee applies below it.
-              </li>
-              <li className={styles.listItem}>Every parcel is insured and requires a signature on delivery.</li>
+              <li className={styles.listItem}>{t("help.shipping.item1")}</li>
+              <li className={styles.listItem}>{t("help.shipping.item2")}</li>
+              <li className={styles.listItem}>{t("help.shipping.item3")}</li>
+              <li className={styles.listItem}>{t("help.shipping.item4")}</li>
             </ul>
           </div>
         </motion.section>
@@ -121,18 +113,13 @@ export default function HelpCenter() {
         >
           <div className={styles.sectionHeader}>
             <RefreshCcw size={24} />
-            <h2 className={styles.sectionTitle}>Returns & Exchanges</h2>
+            <h2 className={styles.sectionTitle}>{t("help.section.returns")}</h2>
           </div>
           <div className={styles.sectionContent}>
             <ul className={styles.list}>
-              <li className={styles.listItem}>You have the right to check your watch before paying.</li>
-              <li className={styles.listItem}>
-                You can return or exchange any undamaged watch only on the stop-desk or to the delivery man, any shipment
-                that reaches your house is not exchangeable.
-              </li>
-              <li className={styles.listItem}>
-                Watches must come back in original condition, with protective films, tags, box and papers.
-              </li>
+              <li className={styles.listItem}>{t("help.returns.item1")}</li>
+              <li className={styles.listItem}>{t("help.returns.item2")}</li>
+              <li className={styles.listItem}>{t("help.returns.item3")}</li>
             </ul>
           </div>
         </motion.section>
@@ -146,42 +133,39 @@ export default function HelpCenter() {
         >
           <div className={styles.sectionHeader}>
             <Ruler size={24} />
-            <h2 className={styles.sectionTitle}>Size Guide</h2>
+            <h2 className={styles.sectionTitle}>{t("help.section.size")}</h2>
           </div>
           <div className={styles.sectionContent}>
-            <p>
-              Case diameter is the quickest way to judge how a watch will wear. Measure your wrist just below the wrist bone
-              and use the table as a starting point.
-            </p>
+            <p>{t("help.size.intro")}</p>
             <div className={styles.tableWrapper}>
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Wrist size</th>
-                    <th>Suggested case</th>
-                    <th>Wears as</th>
+                    <th>{t("help.size.wrist")}</th>
+                    <th>{t("help.size.case")}</th>
+                    <th>{t("help.size.wears")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Under 15 cm</td>
-                    <td>28 – 36 mm</td>
-                    <td>Small / classic</td>
+                    <td>{t("help.size.r1a")}</td>
+                    <td>{t("help.size.r1b")}</td>
+                    <td>{t("help.size.r1c")}</td>
                   </tr>
                   <tr>
-                    <td>15 – 17 cm</td>
-                    <td>36 – 40 mm</td>
-                    <td>Medium</td>
+                    <td>{t("help.size.r2a")}</td>
+                    <td>{t("help.size.r2b")}</td>
+                    <td>{t("help.size.r2c")}</td>
                   </tr>
                   <tr>
-                    <td>17 – 19 cm</td>
-                    <td>40 – 44 mm</td>
-                    <td>Large / sport</td>
+                    <td>{t("help.size.r3a")}</td>
+                    <td>{t("help.size.r3b")}</td>
+                    <td>{t("help.size.r3c")}</td>
                   </tr>
                   <tr>
-                    <td>Over 19 cm</td>
-                    <td>44 mm and up</td>
-                    <td>Oversized</td>
+                    <td>{t("help.size.r4a")}</td>
+                    <td>{t("help.size.r4b")}</td>
+                    <td>{t("help.size.r4c")}</td>
                   </tr>
                 </tbody>
               </table>
@@ -198,7 +182,7 @@ export default function HelpCenter() {
         >
           <div className={styles.sectionHeader}>
             <HelpCircle size={24} />
-            <h2 className={styles.sectionTitle}>FAQ</h2>
+            <h2 className={styles.sectionTitle}>{t("help.section.faq")}</h2>
           </div>
           <div className={styles.accordion}>
             {FAQS.map((faq, index) => (
@@ -208,7 +192,7 @@ export default function HelpCenter() {
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   aria-expanded={openFaq === index}
                 >
-                  <span>{faq.question}</span>
+                  <span>{t(faq.questionKey as any)}</span>
                   <motion.div animate={{ rotate: openFaq === index ? 180 : 0 }} transition={{ duration: 0.2 }}>
                     <ChevronDown size={18} />
                   </motion.div>
@@ -222,7 +206,7 @@ export default function HelpCenter() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       style={{ overflow: "hidden" }}
                     >
-                      <div className={styles.accordionContent}>{faq.answer}</div>
+                      <div className={styles.accordionContent}>{t(faq.answerKey as any)}</div>
                     </motion.div>
                   )}
                 </AnimatePresence>

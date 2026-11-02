@@ -30,10 +30,10 @@ const BestSellers = ({ products }: BestSellersProps) => {
       <div className={styles.header}>
         <h2>{t("bestSellers.title")}</h2>
         <div className={styles.controls}>
-          <button type="button" onClick={() => scroll(-1)} aria-label="Previous" className={styles.controlBtn}>
+          <button type="button" onClick={() => scroll(-1)} aria-label={t("bestSellers.prev")} className={styles.controlBtn}>
             <ChevronLeft size={17} />
           </button>
-          <button type="button" onClick={() => scroll(1)} aria-label="Next" className={styles.controlBtn}>
+          <button type="button" onClick={() => scroll(1)} aria-label={t("bestSellers.next")} className={styles.controlBtn}>
             <ChevronRight size={17} />
           </button>
         </div>

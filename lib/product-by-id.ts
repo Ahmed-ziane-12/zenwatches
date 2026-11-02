@@ -3,7 +3,7 @@ import { getSupabase } from "./supabase";
 import { artFor, type Product, sampleProducts } from "./products";
 
 const TABLE = "products";
-const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors";
+const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand";
 
 interface ProductRow {
   id: number | string;
@@ -16,6 +16,7 @@ interface ProductRow {
   stock: number | null;
   specs: unknown;
   colors: unknown;
+  brand?: string | null;
 }
 
 function strings(v: unknown): string[] {

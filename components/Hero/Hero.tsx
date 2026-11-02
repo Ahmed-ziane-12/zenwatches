@@ -21,13 +21,13 @@ export default function Hero({ columns }: { columns: Product[][] }) {
             {t('hero.subtitle')}
           </p>
           <div className={styles.actions}>
-            <a className={styles.btn} href="#">Shop watches</a>
-            <a className={styles.textLink} href="#">Find your wrist size</a>
+            <a className={styles.btn} href="#">{t('hero.shopWatches')}</a>
+            <a className={styles.textLink} href="#">{t('hero.wristSize')}</a>
           </div>
           <ul className={styles.facts}>
-            <li>Cash on delivery</li>
-            <li>Delivery across Algeria</li>
-            <li>Order in 2 minutes</li>
+            <li>{t('hero.fact1')}</li>
+            <li>{t('hero.fact2')}</li>
+            <li>{t('hero.fact3')}</li>
           </ul>
         </section>
 

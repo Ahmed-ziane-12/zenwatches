@@ -77,9 +77,9 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>{t("cart.empty")}</p>
-            <p className={styles.emptyText}>Pick a watch from the home page and it will show up here.</p>
+            <p className={styles.emptyText}>{t("cart.emptyText")}</p>
             <button type="button" className={styles.secondary} onClick={close}>
-              Keep browsing
+              {t("cart.keepBrowsing")}
             </button>
           </div>
         ) : (
@@ -95,12 +95,12 @@ export default function CartDrawer() {
                     {it.colorLabel && <p className={styles.meta}>{it.colorLabel}</p>}
                     {it.spec && <p className={styles.meta}>{it.spec}</p>}
                     <div className={styles.row}>
-                      <div className={styles.stepper} role="group" aria-label={`Quantity of ${it.name}`}>
-                        <button type="button" onClick={() => setQty(it.id, it.qty - 1)} aria-label={`Remove one ${it.name}`}>
+                      <div className={styles.stepper} role="group" aria-label={t("cart.quantityOf", { name: it.name })}>
+                        <button type="button" onClick={() => setQty(it.id, it.qty - 1)} aria-label={t("cart.removeOne", { name: it.name })}>
                           −
                         </button>
                         <span aria-live="polite">{it.qty}</span>
-                        <button type="button" onClick={() => setQty(it.id, it.qty + 1)} aria-label={`Add one more ${it.name}`}>
+                        <button type="button" onClick={() => setQty(it.id, it.qty + 1)} aria-label={t("cart.addOne", { name: it.name })}>
                           +
                         </button>
                       </div>
@@ -119,7 +119,7 @@ export default function CartDrawer() {
                 <span>{t("cart.total")}</span>
                 <strong>{formatPrice(subtotal, items[0]?.currency)}</strong>
               </div>
-              <p className={styles.fine}>Shipping and taxes are calculated at checkout.</p>
+              <p className={styles.fine}>{t("cart.shippingNote")}</p>
               {/* TODO: connect to your checkout (Stripe, Shopify, etc.). */}
               <button type="button" className={styles.checkout} onClick={handleCheckout}>
                 {t("cart.checkout")}

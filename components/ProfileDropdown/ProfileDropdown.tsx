@@ -9,7 +9,7 @@ import styles from "./ProfileDropdown.module.css";
 
 export default function ProfileDropdown() {
   const { user, signOut } = useAuth();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const locale = language === "AR" ? "ar" : language === "EN" ? "en" : "fr";
@@ -36,7 +36,7 @@ export default function ProfileDropdown() {
       <button
         className={styles.avatarButton}
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="User menu"
+        aria-label={t("profile.userMenu")}
       >
         <User size={18} />
       </button>
@@ -52,14 +52,14 @@ export default function ProfileDropdown() {
             <>
               <Link href={`/${locale}/dashboard`} className={styles.menuItem} onClick={() => setIsOpen(false)}>
                 <LayoutDashboard size={16} />
-                <span>Dashboard</span>
+                <span>{t("profile.dashboard")}</span>
               </Link>
               <div className={styles.divider} />
             </>
           )}
           <button className={styles.menuItem} onClick={() => { signOut(); setIsOpen(false); }}>
             <LogOut size={16} />
-            <span>Sign Out</span>
+            <span>{t("profile.signOut")}</span>
           </button>
         </div>
       )}

@@ -91,10 +91,10 @@ export default function CheckoutPage() {
       <div className={styles.wrapper}>
         <div className={styles.successCard}>
           <h1 className={styles.successTitle}>{t("order.orderSuccess")}</h1>
-          <p className={styles.successSubtitle}>Thank you for your order!</p>
+          <p className={styles.successSubtitle}>{t("order.thankYou")}</p>
 
           <div className={styles.orderSection}>
-            <h2 className={styles.sectionTitle}>Order Details</h2>
+            <h2 className={styles.sectionTitle}>{t("order.details")}</h2>
             <div className={styles.itemsList}>
               {orderedItems.map((item: any, idx: number) => (
                 <div key={idx} className={styles.itemRow}>
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
                   <div className={styles.itemInfo}>
                     <div className={styles.itemName}>{item.name}</div>
                     <div className={styles.itemMeta}>
-                      Qty: {item.qty} {item.colorLabel && `• ${item.colorLabel}`}
+                      {t("order.qtyShort")}: {item.qty} {item.colorLabel && `• ${item.colorLabel}`}
                     </div>
                   </div>
                   <div className={styles.itemPrice}>{formatPrice(item.price * item.qty, item.currency)}</div>
@@ -113,15 +113,15 @@ export default function CheckoutPage() {
             </div>
             <div className={styles.infoList}>
               <div className={styles.infoRow}>
-                <span className={styles.infoLabel}>Name</span>
+                <span className={styles.infoLabel}>{t("order.name")}</span>
                 <span className={styles.infoValue}>{formData.fullName}</span>
               </div>
               <div className={styles.infoRow}>
-                <span className={styles.infoLabel}>Phone</span>
+                <span className={styles.infoLabel}>{t("order.phone")}</span>
                 <span className={styles.infoValue}>{formData.phoneNumber}</span>
               </div>
               <div className={styles.infoRow}>
-                <span className={styles.infoLabel}>Delivery</span>
+                <span className={styles.infoLabel}>{t("order.delivery")}</span>
                 <span className={styles.infoValue}>{formData.deliveryType === "home" ? t("order.home") : t("order.stopDesk")}</span>
               </div>
               <div className={styles.divider} />

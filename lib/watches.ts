@@ -6,7 +6,7 @@ import { artFor, type Product } from "./products";
 // Everything that depends on your database layout is in this block.
 // ---------------------------------------------------------------------------
 const TABLE = "products";
-const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors";
+const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand";
 // PostgREST returns at most 1000 rows by default, so the random pick is made from the first 1000 matches.
 const POOL_LIMIT = 1000;
 
@@ -21,6 +21,7 @@ interface ProductRow {
   stock: number | null;
   specs: unknown;
   colors: unknown;
+  brand?: string | null;
 }
 
 type Availability = "available" | "limited" | "sold-out";
@@ -70,7 +71,10 @@ function toProduct(row: ProductRow): Product {
     colorLabel: colors.length === 1 ? colors[0] : "",
     imageUrl: imageUrlOf(row),
     art: artFor(id),
-  };
+    brand: row.brand || null,
+    stock: row.stock,
+    colors,
+  } as Product;
 }
 // ---------------------------------------------------------------------------
 

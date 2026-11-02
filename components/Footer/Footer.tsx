@@ -17,7 +17,7 @@ export default function Footer() {
             <Image src={"/images/logo.jpg"} alt="Hourwright" width={60} height={60} />
           </Link>
           <p className={styles.description}>
-            Automatic, hand-wound and quartz watches from independent makers.
+            {t("footer.description")}
           </p>
         </div>
 
@@ -35,23 +35,23 @@ export default function Footer() {
           <ul className={styles.links}>
             <li><Link href={`/${locale}/help`} className={styles.link}>{t("nav.help")}</Link></li>
             <li><a href="#" className={styles.link}>{t("contact.title")}</a></li>
-            <li><a href="#" className={styles.link}>Shipping & Returns</a></li>
+            <li><a href="#" className={styles.link}>{t("footer.shippingReturns")}</a></li>
           </ul>
         </div>
 
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>{t("nav.company")}</h3>
           <ul className={styles.links}>
-            <li><a href="#" className={styles.link}>About Us</a></li>
+            <li><a href="#" className={styles.link}>{t("footer.about")}</a></li>
             <li><a href={`/${locale}/help`} className={styles.link}>{t("nav.journal")}</a></li>
-            <li><a href="#" className={styles.link}>Privacy Policy</a></li>
+            <li><a href="#" className={styles.link}>{t("footer.privacy")}</a></li>
           </ul>
         </div>
       </div>
 
       <div className={styles.bottom}>
         <div className={styles.bottomContainer}>
-          <p className={styles.copyright}>© {new Date().getFullYear()} Hourwright. All rights reserved.</p>
+          <p className={styles.copyright}>{t("footer.copyright", { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     </footer>

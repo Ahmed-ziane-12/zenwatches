@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <header className={styles.header}>
-      <nav className={styles.nav} aria-label="Main">
+      <nav className={styles.nav} aria-label={t("navbar.mainNav")}>
         <button
           type="button"
           className={styles.menuButton}
@@ -104,7 +104,7 @@ export default function Navbar() {
           {user ? (
             <ProfileDropdown />
           ) : (
-            <Link href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/signin`} className={styles.cart}>Sign In</Link>
+            <Link href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/signin`} className={styles.cart}>{t("navbar.signIn")}</Link>
           )}
         </div>
       </nav>
