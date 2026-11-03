@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/CartProvider";
 import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -10,6 +10,7 @@ import ProductImage from "@/components/ProductImage/ProductImage";
 import { formatPrice } from "@/lib/products";
 import { useRouter } from "next/navigation";
 import { Minus, Plus } from "lucide-react";
+import { trackInitiateCheckout, trackPurchase } from "@/lib/meta";
 
 export default function CheckoutPage() {
   const { items, subtotal, clear, setQty } = useCart() as any;
@@ -17,6 +18,16 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
+  const checkoutTracked = useRef(false);
+
+  useEffect(() => {
+    if (checkoutTracked.current || items.length === 0) return;
+    checkoutTracked.current = true;
+    trackInitiateCheckout(
+      items.map((item: any) => ({ id: item.id, quantity: item.qty || 1 })),
+      subtotal,
+    );
+  }, [items, subtotal]);
 
   const handleOrderSubmit = async (data: OrderFormData) => {
     try {
@@ -50,6 +61,15 @@ export default function CheckoutPage() {
         items,
         subtotal,
         shippingCost,
+      });
+      trackPurchase({
+        eventId: result.eventId || `purchase_${result.order?.id}`,
+        value: Number(result.order?.grand_total ?? subtotal + shippingCost),
+        contentIds: items.map((item: any) => String(item.id)),
+        contents: items.map((item: any) => ({
+          id: String(item.id),
+          quantity: item.qty || 1,
+        })),
       });
       setOrderSuccess(true);
       if (typeof clear === "function") {

@@ -1,0 +1,120 @@
+.wrap {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1400;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: min(760px, 100%);
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(13, 26, 20, 0.2);
+  pointer-events: auto;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  color: var(--accent);
+  background: rgba(201, 164, 92, 0.14);
+  border: 1px solid rgba(201, 164, 92, 0.26);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.text {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.decline,
+.accept {
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.decline {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.decline:hover {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+
+.accept {
+  border: 1px solid rgba(201, 164, 92, 0.5);
+  background: var(--accent);
+  color: #1a1408;
+}
+
+.accept:hover {
+  background: #d8b977;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0.7rem;
+  }
+
+  .card {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .body {
+    flex: 1 1 calc(100% - 56px);
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .decline,
+  .accept {
+    flex: 1;
+  }
+}

@@ -12,6 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { COLORWAYS, MODELS, type Product } from "@/lib/products";
+import { trackAddToCart } from "@/lib/meta";
 
 // The bag stores a snapshot of each product, because the watches now come from the database
 // and are not in any local catalogue. Prices here are for display only: checkout must look
@@ -126,7 +127,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items,
       count: items.reduce((n, i) => n + i.qty, 0),
       subtotal: items.reduce((n, i) => n + i.qty * i.price, 0),
-      add: (product) => dispatch({ type: "add", product }),
+      add: (product) => {
+        dispatch({ type: "add", product });
+        trackAddToCart(product);
+      },
       setQty: (id, qty) => dispatch({ type: "setQty", id, qty }),
       remove: (id) => dispatch({ type: "remove", id }),
       clear: () => dispatch({ type: "clear" }),

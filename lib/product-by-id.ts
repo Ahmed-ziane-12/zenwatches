@@ -3,7 +3,8 @@ import { getSupabase } from "./supabase";
 import { artFor, type Product, sampleProducts } from "./products";
 
 const TABLE = "products";
-const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand";
+const COLUMNS =
+  "id, name, price, currency, image, images, availability, stock, specs, colors, brand, description, full_description";
 
 interface ProductRow {
   id: number | string;
@@ -17,6 +18,8 @@ interface ProductRow {
   specs: unknown;
   colors: unknown;
   brand?: string | null;
+  description?: string | null;
+  full_description?: string | null;
 }
 
 function strings(v: unknown): string[] {
@@ -66,7 +69,7 @@ export async function getProductById(id: string): Promise<Product | null> {
       image,
       images: strings(row.images).length > 0 ? strings(row.images) : image ? [image] : [],
       brand: (row as any).brand || null,
-      description: (row as any).description || null,
+      description: row.description || row.full_description || null,
       movement: (row as any).movement || (row.specs as any)?.movement || null,
       caseSize: (row as any).caseSize || (row.specs as any)?.caseSize || null,
       waterResistance: (row as any).waterResistance || (row.specs as any)?.waterResistance || null,

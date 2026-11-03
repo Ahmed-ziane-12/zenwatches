@@ -13,7 +13,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.brandSection}>
-          <Link href="/" className={styles.brand}>
+          <Link href={`/${locale}`} className={styles.brand}>
             <Image src={"/images/logo.jpg"} alt="Hourwright" width={60} height={60} />
           </Link>
           <p className={styles.description}>
@@ -24,9 +24,9 @@ export default function Footer() {
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>{t("nav.shop")}</h3>
           <ul className={styles.links}>
-            <li><a href="/watches" className={styles.link}>{t("nav.watches")}</a></li>
+            <li><a href={`/${locale}/watches`} className={styles.link}>{t("nav.watches")}</a></li>
             <li><a href="#" className={styles.link}>{t("nav.straps")}</a></li>
-            <li><a href="/collection" className={styles.link}>{t("nav.collection")}</a></li>
+            <li><a href={`/${locale}/collection`} className={styles.link}>{t("nav.collection")}</a></li>
           </ul>
         </div>
 
@@ -44,7 +44,7 @@ export default function Footer() {
           <ul className={styles.links}>
             <li><a href="#" className={styles.link}>{t("footer.about")}</a></li>
             <li><a href={`/${locale}/help`} className={styles.link}>{t("nav.journal")}</a></li>
-            <li><a href="#" className={styles.link}>{t("footer.privacy")}</a></li>
+            <li><Link href={`/${locale}/privacy`} className={styles.link}>{t("footer.privacy")}</Link></li>
           </ul>
         </div>
       </div>

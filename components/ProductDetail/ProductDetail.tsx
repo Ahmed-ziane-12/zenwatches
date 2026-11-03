@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "@/lib/products";
 import { useCart } from "@/components/CartProvider";
 import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
 import styles from "./ProductDetail.module.css";
 import Image from "next/image";
 import { useLanguage } from "../LanguageProvider";
+import { trackInitiateCheckout, trackPurchase, trackViewContent } from "@/lib/meta";
 
 type ProductDetailProps = {
   product: Product;
@@ -22,6 +23,18 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const images = Array.isArray(p.images) && p.images.length > 0 ? p.images : [selectedImage];
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
+
+  const soldOut =
+    typeof p.stock === "number" ? p.stock <= 0 : p.availability === "sold-out";
+
+  useEffect(() => {
+    trackViewContent({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      currency: product.currency,
+    });
+  }, [product.id, product.name, product.price, product.currency]);
 
   const handleOrderSubmit = async (data: OrderFormData) => {
     try {
@@ -55,6 +68,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         productTotal,
         shippingCost,
       });
+      trackPurchase({
+        eventId: result.eventId || `purchase_${result.order?.id}`,
+        value: Number(result.order?.grand_total ?? productTotal + shippingCost),
+        contentIds: [String(product.id)],
+        contents: [{ id: String(product.id), quantity: data.quantity || 1 }],
+      });
       setOrderSuccess(true);
     } catch (error) {
       console.error("Order submission error:", error);
@@ -66,7 +85,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     add(product);
     alert(t("order.addedToCart"));
   };
-console.log(selectedImage);
 
   if (orderSuccess && orderDetails) {
     const { formData, product: orderedProduct, productTotal, shippingCost } = orderDetails;
@@ -194,15 +212,28 @@ console.log(selectedImage);
           </div>
         )}
 
-        <OrderForm
-          onOrderSubmit={handleOrderSubmit}
-          onAddToCart={handleAddToCart}
-          showAddToCart={true}
-          productPrice={product.price}
-          currency={product.currency || "DA"}
-          colors={p.colors || null}
-          quantity={true}
-        />
+        {soldOut ? (
+          <div className={styles.soldOutBox}>
+            <span className={styles.soldOutBadge}>{t("productCard.soldOut")}</span>
+            <p className={styles.soldOutNote}>{t("product.soldOutNote")}</p>
+          </div>
+        ) : (
+          <OrderForm
+            onOrderSubmit={handleOrderSubmit}
+            onAddToCart={handleAddToCart}
+            onInitiateCheckout={() =>
+              trackInitiateCheckout(
+                [{ id: product.id, quantity: 1 }],
+                product.price,
+              )
+            }
+            showAddToCart={true}
+            productPrice={product.price}
+            currency={product.currency || "DA"}
+            colors={p.colors || null}
+            quantity={true}
+          />
+        )}
       </div>
     </div>
   );

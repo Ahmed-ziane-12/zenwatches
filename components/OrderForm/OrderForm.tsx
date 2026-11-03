@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import dz from "geoalgeria";
 import { Minus, Plus } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -20,6 +20,8 @@ export type OrderFormData = {
 type OrderFormProps = {
   onOrderSubmit?: (data: OrderFormData) => void;
   onAddToCart?: () => void;
+  /** Fired once, the first time the visitor interacts with the form. */
+  onInitiateCheckout?: () => void;
   showAddToCart?: boolean;
   productPrice?: number;
   currency?: string;
@@ -33,6 +35,7 @@ const HOME_DELIVERY_FEE = 600;
 export default function OrderForm({
   onOrderSubmit,
   onAddToCart,
+  onInitiateCheckout,
   showAddToCart = true,
   productPrice = 0,
   currency = "DA",
@@ -41,6 +44,7 @@ export default function OrderForm({
 }: OrderFormProps) {
   const { t } = useLanguage();
   const wilayas = dz.wilayas;
+  const checkoutStarted = useRef(false);
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",
     phoneNumber: "",
@@ -81,6 +85,12 @@ export default function OrderForm({
     }
   };
 
+  const handleFirstInteraction = () => {
+    if (checkoutStarted.current) return;
+    checkoutStarted.current = true;
+    onInitiateCheckout?.();
+  };
+
   const decreaseQty = () => {
     setFormData((prev) => ({ ...prev, quantity: Math.max(1, (prev.quantity || 1) - 1) }));
   };
@@ -91,7 +101,7 @@ export default function OrderForm({
 
   
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} onFocusCapture={handleFirstInteraction} className={styles.form}>
       <h3 className={styles.title}>{t("order.title")}</h3>
       
       <div className={styles.field}>

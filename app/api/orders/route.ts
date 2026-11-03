@@ -1,9 +1,102 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { sendCapiEvent } from "@/lib/capi";
 import dz from "geoalgeria";
 
 const STOP_DESK_FEE = 400;
 const HOME_DELIVERY_FEE = 600;
+
+function cookieValue(request: Request, name: string): string | undefined {
+  const header = request.headers.get("cookie");
+  if (!header) return undefined;
+  for (const part of header.split(";")) {
+    const [key, ...rest] = part.trim().split("=");
+    if (key === name) {
+      try {
+        return decodeURIComponent(rest.join("="));
+      } catch {
+        return rest.join("=");
+      }
+    }
+  }
+  return undefined;
+}
+
+function eventSourceUrl(request: Request): string {
+  const referer = request.headers.get("referer");
+  if (referer) return referer;
+  const site = process.env.NEXT_PUBLIC_SITE_URL;
+  if (site) return site.replace(/\/+$/, "");
+  return new URL(request.url).origin;
+}
+
+function trackingAllowed(request: Request): boolean {
+  if (process.env.NEXT_PUBLIC_META_CONSENT_REQUIRED !== "true") return true;
+  return cookieValue(request, "meta_consent") === "granted";
+}
+
+/**
+ * Campaign attribution from the landing URL. The `orders.source` column already exists,
+ * so UTM values and Meta's click id can be stored without a schema change.
+ */
+function attributionSource(request: Request): string | undefined {
+  const referer = request.headers.get("referer");
+  if (referer) {
+    try {
+      const url = new URL(referer);
+      const keys = [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "fbclid",
+      ];
+      const parts = keys
+        .map((key) => {
+          const value = url.searchParams.get(key);
+          return value ? `${key}=${value}` : null;
+        })
+        .filter(Boolean);
+      if (parts.length > 0) return parts.join("&").slice(0, 300);
+    } catch {
+      // A malformed referer must not block the order.
+    }
+  }
+  const fbc = cookieValue(request, "_fbc");
+  return fbc ? `fbc=${fbc}`.slice(0, 300) : undefined;
+}
+
+async function sendPurchaseEvent(request: Request, input: {
+  eventId: string;
+  phone: string;
+  value: number;
+  contentIds: string[];
+  contents: { id: string; quantity: number }[];
+  contentName?: string;
+}) {
+  if (!trackingAllowed(request)) return;
+  try {
+    await sendCapiEvent({
+      name: "Purchase",
+      eventId: input.eventId,
+      url: eventSourceUrl(request),
+      phone: input.phone,
+      fbp: cookieValue(request, "_fbp"),
+      fbc: cookieValue(request, "_fbc"),
+      ip: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(),
+      ua: request.headers.get("user-agent") || undefined,
+      value: input.value,
+      currency: "DZD",
+      contentIds: input.contentIds,
+      contents: input.contents,
+      contentName: input.contentName,
+    });
+  } catch (error) {
+    // Tracking must never break the order.
+    console.error("[api/orders] CAPI error", error);
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -104,6 +197,10 @@ export async function POST(request: Request) {
       if (communeName) {
         orderData.city = communeName;
       }
+      const attribution = attributionSource(request);
+      if (attribution) {
+        orderData.source = attribution;
+      }
 
       const { data: order, error: orderError } = await supabase
         .from("orders")
@@ -128,7 +225,23 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Failed to create order items" }, { status: 500 });
       }
 
-      return NextResponse.json({ success: true, order }, { status: 201 });
+      const eventId = `purchase_${order.id}`;
+      await sendPurchaseEvent(request, {
+        eventId,
+        phone: phoneNumber,
+        value: grandTotal,
+        contentIds: validatedItems.map((item) => String(item.product_id)),
+        contents: validatedItems.map((item) => ({
+          id: String(item.product_id),
+          quantity: item.quantity,
+        })),
+        contentName: validatedItems
+          .map((item) => item.product_name_snapshot)
+          .join(", ")
+          .slice(0, 200),
+      });
+
+      return NextResponse.json({ success: true, order, eventId }, { status: 201 });
     }
 
     // Handle single product order (backward compatible)
@@ -187,6 +300,10 @@ export async function POST(request: Request) {
     if (communeName) {
       orderData.city = communeName;
     }
+    const attribution = attributionSource(request);
+    if (attribution) {
+      orderData.source = attribution;
+    }
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
@@ -217,7 +334,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to create order items" }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, order }, { status: 201 });
+    const eventId = `purchase_${order.id}`;
+    await sendPurchaseEvent(request, {
+      eventId,
+      phone: phoneNumber,
+      value: grandTotal,
+      contentIds: [String(product.id)],
+      contents: [{ id: String(product.id), quantity: qty }],
+      contentName: product.name,
+    });
+
+    return NextResponse.json({ success: true, order, eventId }, { status: 201 });
   } catch (error: any) {
     console.error("[api/orders]", error);
     return NextResponse.json({ error: "Could not process order." }, { status: 500 });

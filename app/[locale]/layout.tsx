@@ -7,6 +7,8 @@ import { LanguageProvider } from "@/components/LanguageProvider";
 import { AuthProvider } from "@/components/AuthProvider/AuthProvider";
 import WatchSprite from "@/components/WatchSprite";
 import CartDrawer from "@/components/CartDrawer/CartDrawer";
+import MetaPixel from "@/components/MetaPixel";
+import CookieConsent from "@/components/CookieConsent/CookieConsent";
 import { translations, type Language } from "@/lib/translations";
 
 const body = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-body", display: "swap" });
@@ -62,6 +64,8 @@ export default async function LocaleLayout({
               <WatchSprite />
               {children}
               <CartDrawer />
+              <MetaPixel />
+              <CookieConsent />
             </CartProvider>
           </AuthProvider>
         </LanguageProvider>
