@@ -225,7 +225,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
   .cart{
     display: none;
   }
