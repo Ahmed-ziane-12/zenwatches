@@ -21,8 +21,8 @@ export default function Hero({ columns }: { columns: Product[][] }) {
             {t('hero.subtitle')}
           </p>
           <div className={styles.actions}>
-            <a className={styles.btn} href="#">{t('hero.shopWatches')}</a>
-            <a className={styles.textLink} href="#">{t('hero.wristSize')}</a>
+            <a className={styles.btn} href="/watches">{t('hero.shopWatches')}</a>
+            <a className={styles.textLink} href="/collection">{t('hero.wristSize')}</a>
           </div>
           <ul className={styles.facts}>
             <li>{t('hero.fact1')}</li>
