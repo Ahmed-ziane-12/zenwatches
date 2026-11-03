@@ -1,94 +1,367 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { LayoutDashboard, ShoppingCart, DollarSign, Clock, CheckCircle, Hourglass } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { useCallback, useEffect, useState } from "react";
+import {
+  AlertTriangle,
+  Banknote,
+  Hourglass,
+  LayoutDashboard,
+  PackageCheck,
+  PackageOpen,
+  RefreshCw,
+  ShoppingCart,
+  Sparkles,
+  Timer,
+} from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useAuth } from "@/components/AuthProvider/AuthProvider";
+import styles from "./overview.module.css";
+
+interface ChartSlice {
+  name: string;
+  value: number;
+  fill: string;
+}
+
+interface Stats {
+  totalOrders: number;
+  totalRevenue: number;
+  pendingRevenue: number;
+  newOrders: number;
+  processingOrders: number;
+  shippedOrders: number;
+  deliveredOrders: number;
+  cancelledOrders: number;
+  averageOrderValue: number;
+  chartData: ChartSlice[];
+}
+
+function formatMoney(value: number) {
+  return `${Math.round(value || 0).toLocaleString()} DA`;
+}
+
+function ChartTooltip({ active, payload }: any) {
+  if (!active || !payload?.length) return null;
+  const slice = payload[0];
+  return (
+    <div className={styles.tooltip}>
+      <span
+        className={styles.tooltipDot}
+        style={{ background: slice.payload?.fill }}
+      />
+      <span>{slice.name}</span>
+      <strong>{slice.value}</strong>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<any>(null);
+  const { user } = useAuth();
+  const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [today, setToday] = useState("");
+
+  const fetchStats = useCallback(async (mode: "initial" | "refresh" = "initial") => {
+    if (mode === "refresh") setRefreshing(true);
+    try {
+      const response = await fetch("/api/dashboard/stats", { cache: "no-store" });
+      if (!response.ok) throw new Error("Request failed");
+      const data = await response.json();
+      setStats(data);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+      setError("Could not load dashboard stats.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchStats();
+  }, [fetchStats]);
+
+  useEffect(() => {
+    setToday(
+      new Intl.DateTimeFormat("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date()),
+    );
   }, []);
 
-  const fetchStats = async () => {
-    try {
-      const response = await fetch("/api/dashboard/stats");
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <LoadingSpinner size={32} text="Loading stats..." />
-      </div>
-    );
-  }
+  const totalOrders = stats?.totalOrders ?? 0;
+  const deliveredOrders = stats?.deliveredOrders ?? 0;
+  const cancelledOrders = stats?.cancelledOrders ?? 0;
+  const pendingOrders =
+    (stats?.newOrders ?? 0) + (stats?.processingOrders ?? 0) + (stats?.shippedOrders ?? 0);
+  const deliveryRate = totalOrders > 0 ? Math.round((deliveredOrders / totalOrders) * 100) : 0;
+  const cancellationRate = totalOrders > 0 ? Math.round((cancelledOrders / totalOrders) * 100) : 0;
+  const chartData = stats?.chartData ?? [];
 
   const statCards = [
-    { title: "Total Orders", value: stats?.totalOrders || 0, icon: ShoppingCart, color: "#3b82f6" },
-    { title: "Revenue (Delivered)", value: `${(stats?.totalRevenue || 0).toLocaleString()} DA`, icon: DollarSign, color: "#10b981" },
-    { title: "Pending Revenue", value: `${(stats?.pendingRevenue || 0).toLocaleString()} DA`, icon: Hourglass, color: "#f59e0b" },
-    { title: "New Orders", value: stats?.newOrders || 0, icon: Clock, color: "#8b5cf6" },
-    { title: "Delivered", value: stats?.deliveredOrders || 0, icon: CheckCircle, color: "#06b6d4" },
+    {
+      label: "Total orders",
+      value: totalOrders.toLocaleString(),
+      hint: "All time",
+      icon: ShoppingCart,
+      tone: styles.blue,
+    },
+    {
+      label: "Delivered revenue",
+      value: formatMoney(stats?.totalRevenue ?? 0),
+      hint: "Paid on delivery",
+      icon: Banknote,
+      tone: styles.green,
+    },
+    {
+      label: "Pending revenue",
+      value: formatMoney(stats?.pendingRevenue ?? 0),
+      hint: "Awaiting completion",
+      icon: Hourglass,
+      tone: styles.amber,
+    },
+    {
+      label: "New orders",
+      value: (stats?.newOrders ?? 0).toLocaleString(),
+      hint: "Needs attention",
+      icon: Sparkles,
+      tone: styles.violet,
+    },
+    {
+      label: "Delivered",
+      value: deliveredOrders.toLocaleString(),
+      hint: `${deliveryRate}% of orders`,
+      icon: PackageCheck,
+      tone: styles.cyan,
+    },
   ];
 
   return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem" }}>
-        <LayoutDashboard size={28} style={{ color: "var(--text)" }} />
-        <h1 style={{ fontSize: "1.8rem", color: "var(--text)", fontWeight: "600" }}>Overview</h1>
-      </div>
-      
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-        {statCards.map((card, idx) => (
-          <div key={idx} style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--line)", display: "flex", alignItems: "center", gap: "1rem" }}>
-            <div style={{ width: "48px", height: "48px", borderRadius: "10px", background: `${card.color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <card.icon size={24} style={{ color: card.color }} />
-            </div>
-            <div>
-              <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>{card.title}</p>
-              <p style={{ color: "var(--text)", fontSize: "1.5rem", fontWeight: "600" }}>{card.value}</p>
-            </div>
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <div className={styles.heading}>
+          <span className={styles.headIcon}>
+            <LayoutDashboard size={24} />
+          </span>
+          <div>
+            <h1 className={styles.title}>Overview</h1>
+            <p className={styles.subtitle}>
+              Welcome back{user?.username ? `, ${user.username}` : ""}
+              {today ? ` · ${today}` : ""}
+            </p>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--line)" }}>
-        <h2 style={{ fontSize: "1.3rem", color: "var(--text)", fontWeight: "600", marginBottom: "1.5rem" }}>Orders by Status</h2>
-        {stats?.chartData && stats.chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={stats.chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {stats.chartData.map((entry: any, index: number) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        ) : (
-          <div style={{ textAlign: "center", padding: "2rem", color: "var(--muted)" }}>No orders yet</div>
-        )}
-      </div>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.ghostButton}
+            onClick={() => fetchStats("refresh")}
+            disabled={refreshing}
+          >
+            <RefreshCw size={15} className={refreshing ? styles.spin : ""} />
+            <span>{refreshing ? "Refreshing" : "Refresh"}</span>
+          </button>
+        </div>
+      </header>
+
+      {loading ? (
+        <>
+          <div className={styles.stats}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className={styles.statSkeleton} />
+            ))}
+          </div>
+          <div className={styles.panels}>
+            <div className={styles.cardSkeleton} />
+            <div className={styles.cardSkeleton} />
+          </div>
+        </>
+      ) : error ? (
+        <div className={styles.card}>
+          <div className={styles.empty}>
+            <span className={styles.emptyIcon}>
+              <AlertTriangle size={26} />
+            </span>
+            <h2 className={styles.emptyTitle}>{error}</h2>
+            <p className={styles.emptyText}>Please try again in a moment.</p>
+            <button
+              type="button"
+              className={styles.ghostButton}
+              onClick={() => fetchStats("refresh")}
+            >
+              <RefreshCw size={15} />
+              <span>Retry</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className={styles.stats}>
+            {statCards.map((card) => (
+              <article key={card.label} className={`${styles.statCard} ${card.tone}`}>
+                <div className={styles.statTop}>
+                  <span className={styles.statIcon}>
+                    <card.icon size={20} />
+                  </span>
+                </div>
+                <p className={styles.statLabel}>{card.label}</p>
+                <p className={styles.statValue}>{card.value}</p>
+                <p className={styles.statHint}>{card.hint}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className={styles.panels}>
+            <section className={styles.card}>
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2 className={styles.cardTitle}>Orders by status</h2>
+                  <p className={styles.cardSubtitle}>Distribution across every order</p>
+                </div>
+                <span className={styles.chip}>{totalOrders} total</span>
+              </div>
+
+              {chartData.length > 0 ? (
+                <>
+                  <div className={styles.chartWrap}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={chartData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={68}
+                          outerRadius={104}
+                          paddingAngle={3}
+                          cornerRadius={6}
+                          stroke="none"
+                        >
+                          {chartData.map((entry) => (
+                            <Cell key={entry.name} fill={entry.fill} />
+                          ))}
+                        </Pie>
+                        <Tooltip content={<ChartTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className={styles.donutCenter}>
+                      <strong>{totalOrders}</strong>
+                      <span>orders</span>
+                    </div>
+                  </div>
+
+                  <ul className={styles.legend}>
+                    {chartData.map((entry) => (
+                      <li key={entry.name} className={styles.legendItem}>
+                        <span
+                          className={styles.legendDot}
+                          style={{ background: entry.fill }}
+                        />
+                        {entry.name}
+                        <span className={styles.legendCount}>{entry.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <div className={styles.empty}>
+                  <span className={styles.emptyIcon}>
+                    <PackageOpen size={26} />
+                  </span>
+                  <h3 className={styles.emptyTitle}>No orders yet</h3>
+                  <p className={styles.emptyText}>
+                    New orders will appear here as soon as they arrive.
+                  </p>
+                </div>
+              )}
+            </section>
+
+            <section className={styles.card}>
+              <div className={styles.cardHeader}>
+                <div>
+                  <h2 className={styles.cardTitle}>At a glance</h2>
+                  <p className={styles.cardSubtitle}>Health of your order pipeline</p>
+                </div>
+              </div>
+
+              <div className={styles.metricList}>
+                <div>
+                  <div className={styles.metricTop}>
+                    <span>Delivery rate</span>
+                    <strong>{deliveryRate}%</strong>
+                  </div>
+                  <div className={styles.track}>
+                    <span
+                      className={`${styles.fill} ${styles.fillGreen}`}
+                      style={{ width: `${deliveryRate}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className={styles.metricTop}>
+                    <span>Cancellation rate</span>
+                    <strong>{cancellationRate}%</strong>
+                  </div>
+                  <div className={styles.track}>
+                    <span
+                      className={`${styles.fill} ${styles.fillRed}`}
+                      style={{ width: `${cancellationRate}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className={styles.metricTop}>
+                    <span>Pending orders</span>
+                    <strong>{pendingOrders}</strong>
+                  </div>
+                  <div className={styles.track}>
+                    <span
+                      className={styles.fill}
+                      style={{
+                        width: `${totalOrders > 0 ? Math.round((pendingOrders / totalOrders) * 100) : 0}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.miniGrid}>
+                <div className={styles.miniCard}>
+                  <span>Avg. delivered order</span>
+                  <strong>{formatMoney(stats?.averageOrderValue ?? 0)}</strong>
+                </div>
+                <div className={styles.miniCard}>
+                  <span>In progress</span>
+                  <strong>{(stats?.processingOrders ?? 0) + (stats?.shippedOrders ?? 0)}</strong>
+                </div>
+                <div className={styles.miniCard}>
+                  <span>Awaiting pickup</span>
+                  <strong>{stats?.newOrders ?? 0}</strong>
+                </div>
+                <div className={styles.miniCard}>
+                  <span>Cancelled</span>
+                  <strong>{cancelledOrders}</strong>
+                </div>
+              </div>
+
+              <div className={styles.tip}>
+                <Timer size={15} />
+                <span>Keep new orders under 24h to improve your delivery rate.</span>
+              </div>
+            </section>
+          </div>
+        </>
+      )}
     </div>
   );
 }

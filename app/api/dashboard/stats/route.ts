@@ -18,7 +18,11 @@ export async function GET() {
     const totalRevenue = orders?.filter(o => o.status === "delivered").reduce((sum, order) => sum + (Number(order.grand_total) || 0), 0) || 0;
     const pendingRevenue = orders?.filter(o => o.status !== "delivered" && o.status !== "cancelled").reduce((sum, order) => sum + (Number(order.grand_total) || 0), 0) || 0;
     const newOrders = orders?.filter(o => o.status === "new").length || 0;
+    const processingOrders = orders?.filter(o => o.status === "processing").length || 0;
+    const shippedOrders = orders?.filter(o => o.status === "shipped").length || 0;
     const deliveredOrders = orders?.filter(o => o.status === "delivered").length || 0;
+    const cancelledOrders = orders?.filter(o => o.status === "cancelled").length || 0;
+    const averageOrderValue = deliveredOrders > 0 ? Math.round(totalRevenue / deliveredOrders) : 0;
 
     // Group by status for chart
     const statusCounts = orders?.reduce((acc: any, order) => {
@@ -39,7 +43,11 @@ export async function GET() {
       totalRevenue,
       pendingRevenue,
       newOrders,
+      processingOrders,
+      shippedOrders,
       deliveredOrders,
+      cancelledOrders,
+      averageOrderValue,
       chartData
     }, { status: 200 });
   } catch (error: any) {
