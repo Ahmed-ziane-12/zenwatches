@@ -1,0 +1,159 @@
+
+.page {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.title {
+  margin: 0 0 1.5rem;
+  font-size: 1.875rem;
+  font-weight: 600;
+}
+
+.layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: 260px 1fr;
+    align-items: start;
+  }
+
+  .filters {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.label {
+  display: block;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 0.25rem;
+  font: inherit;
+  background: #fff;
+}
+
+.input:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 1px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: #111;
+}
+
+.chipActive {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.linkButton {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.count {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: #525252;
+}
+
+.grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.empty {
+  padding: 2rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0 0 0.5rem;
+}
+
+.empty .linkButton {
+  align-self: auto;
+}

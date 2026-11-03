@@ -37,12 +37,12 @@ export default function Navbar() {
         </button>
 
         <ul className={styles.links}>
-          <li><a href="#">{t("nav.watches")}</a></li>
-          <li><a href="/makers">{t("nav.makers")}</a></li>
+          <li><a href="/watches">{t("nav.watches")}</a></li>
+          <li><a href="/collection">{t("nav.collection")}</a></li>
           <li><a href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/help`}>{t("nav.help")}</a></li>
         </ul>
 
-        <Link className={styles.brand} href="/">
+        <Link className={styles.brand} href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}`}>
           <Image src={"/images/logo.jpg"} alt={""} width={80} height={80} />
         </Link>
 
@@ -113,13 +113,13 @@ export default function Navbar() {
         <div className={styles.mobileMenu} role="menu">
           <ul className={styles.mobileLinks}>
             <li role="menuitem">
-              <a href="#" onClick={() => setMenuOpen(false)}>
+              <a href="/watches" onClick={() => setMenuOpen(false)}>
                 {t("nav.watches")}
               </a>
             </li>
             <li role="menuitem">
-              <a href="#" onClick={() => setMenuOpen(false)}>
-                {t("nav.makers")}
+              <a href="/collection" onClick={() => setMenuOpen(false)}>
+                {t("nav.collection")}
               </a>
             </li>
             <li role="menuitem">
@@ -127,6 +127,19 @@ export default function Navbar() {
                 {t("nav.help")}
               </a>
             </li>
+            <button
+            type="button"
+            className={styles.cart2}
+            onClick={open}
+            aria-label={t("aria.openBag", { count, itemText })}
+          >
+            <ShoppingBag size={20} />
+            <span className={styles.cartLabel}>{t("nav.bag")}</span>
+            {/* Keyed on count so the badge replays its bump each time an item is added. */}
+            <span key={count} className={`${styles.badge} ${count > 0 ? styles.badgeOn : ""}`} aria-hidden="true">
+              {count}
+            </span>
+          </button>
           </ul>
         </div>
       )}

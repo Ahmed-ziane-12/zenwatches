@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const watches = await getRandomWatches(count);
     return NextResponse.json({ count: watches.length, watches }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
-    // Log the detail on the server, send the client a generic message.
+    
     console.error("[api/watches/random]", err);
     return NextResponse.json({ error: "Could not load watches." }, { status: 500 });
   }

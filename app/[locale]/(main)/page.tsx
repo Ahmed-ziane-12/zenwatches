@@ -34,7 +34,7 @@ async function loadHeroWatches(): Promise<Product[]> {
 
 export default async function Home() {
   const watches = await loadHeroWatches();
-  const bestSellers = await getRandomWatches(5);
+  const bestSellers = await getRandomWatches(6);
   return (
     <div className="wrapper">
       <Hero columns={buildColumns(watches)} />

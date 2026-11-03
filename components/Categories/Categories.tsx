@@ -7,11 +7,11 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 
 const TILES = [
-  { labelKey: "categories.mens", href: "/shop/category/mens", image: "/images/men.avif" },
-  { labelKey: "categories.womens", href: "/shop/category/womens", image: "/images/women.avif" },
-  { labelKey: "categories.smart", href: "/shop/category/smart", image: "/images/smart.avif" },
-  { labelKey: "categories.accessories", href: "/shop/category/accessories", image: "/images/accessories.avif" },
-  { labelKey: "categories.luxury", href: "/shop/collection/luxury", image: "/images/luxury.avif" },
+  { labelKey: "categories.mens", href: "/watches?category=men", image: "/images/men.avif" },
+  { labelKey: "categories.womens", href: "/watches?category=women", image: "/images/women.avif" },
+  { labelKey: "categories.smart", href: "/watches?category=smart", image: "/images/smart.avif" },
+  { labelKey: "categories.accessories", href: "/watches?category=accessories", image: "/images/accessories.avif" },
+  { labelKey: "categories.luxury", href: "/watches?category=luxury", image: "/images/luxury.avif" },
 ];
 
 
@@ -22,7 +22,7 @@ const Categories = () => {
     <section className={styles.categories}>
         <div className={styles.sectionTitle}>
         <h2>{t("categories.title")}</h2>
-        <Link href="/shop/category" className={styles.exploreLink}>
+        <Link href="/watches" className={styles.exploreLink}>
           {t("categories.exploreAll")} <ArrowRight size={15} />
         </Link>
       </div>

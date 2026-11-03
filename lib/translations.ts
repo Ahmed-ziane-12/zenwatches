@@ -2,7 +2,7 @@ export const translations = {
   AR: {
     "nav.watches": "ساعات",
     "nav.straps": "أساور",
-    "nav.makers": "صناع",
+    "nav.collection": "مجموعات",
     "nav.help": "مساعدة",
     "nav.bag": "الحقيبة",
     "nav.shop": "متجر",
@@ -198,7 +198,7 @@ export const translations = {
   EN: {
     "nav.watches": "Watches",
     "nav.straps": "Straps",
-    "nav.makers": "Makers",
+    "nav.collection": "Collections",
     "nav.help": "Help Center",
     "nav.bag": "Bag",
     "nav.shop": "Shop",
@@ -394,7 +394,7 @@ export const translations = {
   FR: {
     "nav.watches": "Montres",
     "nav.straps": "Bracelets",
-    "nav.makers": "Créateurs",
+    "nav.collection": "Collections",
     "nav.help": "Centre D'Aide",
     "nav.bag": "Panier",
     "nav.shop": "Boutique",

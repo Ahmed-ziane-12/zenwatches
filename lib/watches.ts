@@ -3,11 +3,11 @@ import { getSupabase } from "./supabase";
 import { artFor, type Product } from "./products";
 
 // ---------------------------------------------------------------------------
-// Everything that depends on your database layout is in this block.
+// Everything that depends on database layout is in this block.
 // ---------------------------------------------------------------------------
 const TABLE = "products";
 const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand";
-// PostgREST returns at most 1000 rows by default, so the random pick is made from the first 1000 matches.
+
 const POOL_LIMIT = 1000;
 
 interface ProductRow {
@@ -102,4 +102,16 @@ export async function getRandomWatches(count = 15): Promise<Product[]> {
   return shuffle((data ?? []).filter((row) => availabilityOf(row) !== "sold-out"))
     .slice(0, count)
     .map(toProduct);
+}
+
+export async function getAllWatches(): Promise<Product[]> {
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .select(COLUMNS)
+    .eq("active", true)
+    .overrideTypes<ProductRow[], { merge: false }>();
+
+  if (error) throw new Error(`Supabase query failed: ${error.message}`);
+
+  return (data ?? []).map(toProduct);
 }

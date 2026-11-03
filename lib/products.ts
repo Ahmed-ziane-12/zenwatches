@@ -49,6 +49,7 @@ export interface Product {
   colors?: string[] | null;
   availability?: string | null;
   stock?: number | null;
+  category?: string | null;
 }
 
 /** Scroll settings for one hero column. `dur` is seconds per loop; `delay` offsets the start. */

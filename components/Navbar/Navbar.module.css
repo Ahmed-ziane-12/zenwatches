@@ -128,7 +128,8 @@
   background: var(--line);
 }
 
-.cart {
+.cart,
+.cart2 {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -221,6 +222,12 @@
     text-align: start;
     flex: 0;
     order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart{
+    display: none;
   }
 }
 
