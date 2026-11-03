@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { COLUMN_MOTION, formatPrice, type Product } from "@/lib/products";
 import { useCart } from "../CartProvider";
+import { useLanguage } from "../LanguageProvider";
 import ProductImage from "../ProductImage/ProductImage";
 import styles from "./WatchColumns.module.css";
 
 function Tile({ product, clone = false }: { product: Product; clone?: boolean }) {
   const { add } = useCart();
+  const { t } = useLanguage();
   const [added, setAdded] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -43,9 +45,9 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
             className={`${styles.add} ${added ? styles.added : ""}`}
             onClick={onAdd}
             tabIndex={clone ? -1 : undefined}
-            aria-label={`Add ${label} to bag`}
+            aria-label={t("watchColumns.addToBag", { name: label })}
           >
-            {added ? "Added" : "Add"}
+            {added ? t("watchColumns.added") : t("watchColumns.add")}
           </button>
         </div>
       </figcaption>
@@ -56,9 +58,10 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
 // `columns` comes from the server page: three lists of watches picked at random from the database.
 export default function WatchColumns({ columns }: { columns: Product[][] }) {
   const [paused, setPaused] = useState(false);
+  const { t } = useLanguage();
 
   return (
-    <section className={`${styles.stage} ${paused ? styles.paused : ""}`} aria-label="Featured watches">
+    <section className={`${styles.stage} ${paused ? styles.paused : ""}`} aria-label={t("watchColumns.featured")}>
       <div className={styles.visual}>
         {columns.map((products, i) => {
           const motion = COLUMN_MOTION[i % COLUMN_MOTION.length];
@@ -89,7 +92,7 @@ export default function WatchColumns({ columns }: { columns: Product[][] }) {
           aria-pressed={paused}
           onClick={() => setPaused((p) => !p)}
         >
-          {paused ? "Play motion" : "Pause motion"}
+          {paused ? t("watchColumns.playMotion") : t("watchColumns.pauseMotion")}
         </button>
       </div>
     </section>

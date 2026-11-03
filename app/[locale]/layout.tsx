@@ -7,18 +7,33 @@ import { LanguageProvider } from "@/components/LanguageProvider";
 import { AuthProvider } from "@/components/AuthProvider/AuthProvider";
 import WatchSprite from "@/components/WatchSprite";
 import CartDrawer from "@/components/CartDrawer/CartDrawer";
+import { translations, type Language } from "@/lib/translations";
 
 const body = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 const STORE_DOMAIN = process.env.NEXT_PUBLIC_STORE_DOMAIN || "zenwatches";
 const STORE_NAME = process.env.NEXT_PUBLIC_STORE_NAME || "Zen Watches";
-export const metadata: Metadata = {
-  title: { default: `${STORE_DOMAIN} | Best Watches for The Best Price`, template: `%s | ${STORE_NAME}` },
-  description: "Automatic, hand-wound and quartz watches from independent makers.",
-  icons: {
-    icon: "/icon.svg",
-  },
-};
+
+function localeToLanguage(locale: string): Language {
+  return locale === "en" ? "EN" : locale === "fr" ? "FR" : "AR";
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = translations[localeToLanguage(locale)];
+
+  return {
+    title: { default: `${STORE_DOMAIN} | ${t["meta.tagline"]}`, template: `%s | ${STORE_NAME}` },
+    description: t["meta.description"],
+    icons: {
+      icon: "/icon.svg",
+    },
+  };
+}
 
 const locales = ["ar", "en", "fr"];
 

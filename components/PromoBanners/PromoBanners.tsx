@@ -12,7 +12,7 @@ const PromoBanners = () => {
   return (
     <section className={styles.container}>
         <div className={styles.banner}>
-            <img src="/images/banner1.avif" alt="Promo Banner" className={styles.bannerImage} />
+            <img src="/images/banner1.avif" alt="" className={styles.bannerImage} />
             <div className={styles.heroGradient} />
             <p className={styles.promoDescription}>{t("promo.upTo40")}</p>
             <h2 className={styles.promoTitle}>{t("promo.luxuryWatches")}</h2>
@@ -22,7 +22,7 @@ const PromoBanners = () => {
             </Link>
         </div>
         <div className={styles.banner}>
-            <img src="/images/banner2.avif" alt="Promo Banner" className={styles.bannerImage} />
+            <img src="/images/banner2.avif" alt="" className={styles.bannerImage} />
             <div className={styles.heroGradient1} />
             <p className={styles.promoDescription}>{t("promo.elegant")}</p>
             <h2 className={styles.promoTitle}>{t("promo.womensWatches")}</h2>

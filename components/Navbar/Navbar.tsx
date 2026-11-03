@@ -6,7 +6,7 @@ import { useCart } from "../CartProvider";
 import { useLanguage } from "../LanguageProvider";
 import styles from "./Navbar.module.css";
 import Image from "next/image";
-import { ShoppingBag, Menu, X, ChevronDown, ChevronUp } from "lucide-react";
+import { ShoppingBag, Menu, X, ChevronDown, ChevronUp, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../AuthProvider/AuthProvider";
@@ -20,8 +20,9 @@ export default function Navbar() {
   const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const locale = language === "AR" ? "ar" : language === "EN" ? "en" : "fr";
 
-  const itemText = count === 1 ? (language === "AR" ? "عنصر" : language === "FR" ? "article" : "item") : language === "AR" ? "عناصر" : language === "FR" ? "articles" : "items";
+  const itemText = t(count === 1 ? "aria.itemOne" : "aria.itemMany");
 
   return (
     <header className={styles.header}>
@@ -37,12 +38,12 @@ export default function Navbar() {
         </button>
 
         <ul className={styles.links}>
-          <li><a href="/watches">{t("nav.watches")}</a></li>
-          <li><a href="/collection">{t("nav.collection")}</a></li>
-          <li><a href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/help`}>{t("nav.help")}</a></li>
+          <li><a href={`/${locale}/watches`}>{t("nav.watches")}</a></li>
+          <li><a href={`/${locale}/collection`}>{t("nav.collection")}</a></li>
+          <li><a href={`/${locale}/help`}>{t("nav.help")}</a></li>
         </ul>
 
-        <Link className={styles.brand} href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}`}>
+        <Link className={styles.brand} href={`/${locale}`}>
           <Image src={"/images/logo.jpg"} alt={""} width={80} height={80} />
         </Link>
 
@@ -104,7 +105,13 @@ export default function Navbar() {
           {user ? (
             <ProfileDropdown />
           ) : (
-            <Link href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/signin`} className={styles.cart}>{t("navbar.signIn")}</Link>
+            <Link
+              href={`/${locale}/signin`}
+              className={`${styles.cart} ${styles.signIn}`}
+            >
+              <User size={18} />
+              <span className={styles.signInLabel}>{t("navbar.signIn")}</span>
+            </Link>
           )}
         </div>
       </nav>
@@ -113,33 +120,35 @@ export default function Navbar() {
         <div className={styles.mobileMenu} role="menu">
           <ul className={styles.mobileLinks}>
             <li role="menuitem">
-              <a href="/watches" onClick={() => setMenuOpen(false)}>
+              <a href={`/${locale}/watches`} onClick={() => setMenuOpen(false)}>
                 {t("nav.watches")}
               </a>
             </li>
             <li role="menuitem">
-              <a href="/collection" onClick={() => setMenuOpen(false)}>
+              <a href={`/${locale}/collection`} onClick={() => setMenuOpen(false)}>
                 {t("nav.collection")}
               </a>
             </li>
             <li role="menuitem">
-              <a href={`/${language === "AR" ? "ar" : language === "EN" ? "en" : "fr"}/help`} onClick={() => setMenuOpen(false)}>
+              <a href={`/${locale}/help`} onClick={() => setMenuOpen(false)}>
                 {t("nav.help")}
               </a>
             </li>
-            <button
-            type="button"
-            className={styles.cart2}
-            onClick={open}
-            aria-label={t("aria.openBag", { count, itemText })}
-          >
-            <ShoppingBag size={20} />
-            <span className={styles.cartLabel}>{t("nav.bag")}</span>
-            {/* Keyed on count so the badge replays its bump each time an item is added. */}
-            <span key={count} className={`${styles.badge} ${count > 0 ? styles.badgeOn : ""}`} aria-hidden="true">
-              {count}
-            </span>
-          </button>
+            <li>
+              <button
+                type="button"
+                className={styles.cart2}
+                onClick={() => { open(); setMenuOpen(false); }}
+                aria-label={t("aria.openBag", { count, itemText })}
+              >
+                <ShoppingBag size={20} />
+                <span className={styles.cartLabel}>{t("nav.bag")}</span>
+                {/* Keyed on count so the badge replays its bump each time an item is added. */}
+                <span key={count} className={`${styles.badge} ${count > 0 ? styles.badgeOn : ""}`} aria-hidden="true">
+                  {count}
+                </span>
+              </button>
+            </li>
           </ul>
         </div>
       )}

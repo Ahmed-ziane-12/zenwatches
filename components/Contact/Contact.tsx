@@ -9,7 +9,7 @@ const Contact = () => {
 
   return (
     <div className={styles.banner}>
-      <img src="/contact.avif" alt="Promo Banner" className={styles.bannerImage} />
+      <img src="/contact.avif" alt="" className={styles.bannerImage} />
       <div className={styles.heroGradient} />
       <p className={styles.promoDescription}>{t("contact.promo1")}</p>
       <h2 className={styles.promoTitle}>{t("contact.title")}</h2>
