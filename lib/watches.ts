@@ -115,3 +115,30 @@ export async function getAllWatches(): Promise<Product[]> {
 
   return (data ?? []).map(toProduct);
 }
+
+export interface BrandSummary {
+  name: string;
+  count: number;
+}
+
+/** Brands that actually have active products, most stocked first. */
+export async function getTopBrands(limit = 12): Promise<BrandSummary[]> {
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .select("brand")
+    .eq("active", true);
+
+  if (error) throw new Error(`Supabase query failed: ${error.message}`);
+
+  const counts = new Map<string, number>();
+  for (const row of data ?? []) {
+    const name = typeof row.brand === "string" ? row.brand.trim() : "";
+    if (!name) continue;
+    counts.set(name, (counts.get(name) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}

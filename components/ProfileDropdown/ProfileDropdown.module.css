@@ -1,78 +1,189 @@
 .dropdown {
   position: relative;
+  display: inline-flex;
 }
 
 .avatarButton {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #87CEEB;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: white;
+  gap: 0.4rem;
+  height: 40px;
+  padding: 0 0.55rem 0 0.3rem;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--fg);
   cursor: pointer;
-  border: none;
-  transition: opacity 0.2s;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
 }
 
-.avatarButton:hover {
-  opacity: 0.9;
+.avatarButton:hover,
+.avatarButtonOpen {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.avatarButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.avatar,
+.avatarLarge {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #1a1408;
+  background: linear-gradient(135deg, #e2c98d, var(--accent) 55%, var(--color-gold-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  font-size: 0.68rem;
+}
+
+.avatarLarge {
+  width: 38px;
+  height: 38px;
+  font-size: 0.78rem;
+}
+
+.chevron {
+  color: var(--muted);
+  transition: transform 180ms ease;
+}
+
+.avatarButtonOpen .chevron {
+  transform: rotate(180deg);
 }
 
 .menu {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
-  background: var(--card);
-  backdrop-filter: blur(10px);
+  inset-inline-end: 0;
+  z-index: 120;
+  width: min(280px, calc(100vw - 2rem));
+  padding: 0.4rem;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
-  z-index: 100;
-  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: 0 18px 44px rgba(13, 26, 20, 0.18);
+  transform-origin: top right;
+}
+
+[dir="rtl"] .menu {
+  transform-origin: top left;
 }
 
 .userInfo {
-  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.55rem 0.65rem;
+}
+
+.userText {
+  flex: 1;
+  min-width: 0;
 }
 
 .username {
-  color: var(--text);
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--fg);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .email {
+  margin-top: 0.1rem;
+  overflow: hidden;
+  font-size: 0.72rem;
   color: var(--muted);
-  font-size: 0.8rem;
-  word-break: break-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.roleChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid rgba(201, 164, 92, 0.28);
+  border-radius: 999px;
+  background: rgba(201, 164, 92, 0.12);
+  color: var(--accent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .divider {
   height: 1px;
+  margin: 0.3rem 0.35rem;
   background: var(--line);
 }
 
 .menuItem {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  color: var(--text);
-  text-decoration: none;
-  background: transparent;
-  border: none;
+  gap: 0.55rem;
   width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.875rem;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg);
   font-family: inherit;
-  transition: background 0.15s;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
 }
 
 .menuItem:hover {
-  background: var(--bg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+
+.menuIcon {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color 150ms ease;
+}
+
+.menuItem:hover .menuIcon {
+  color: var(--color-gold-deep);
+}
+
+.signOut:hover {
+  background: color-mix(in srgb, var(--error) 10%, transparent);
+  color: var(--error);
+}
+
+.signOut:hover .menuIcon {
+  color: var(--error);
+}
+
+@media (max-width: 420px) {
+  .avatarButton {
+    padding-inline-end: 0.35rem;
+  }
+
+  .menu {
+    width: min(260px, calc(100vw - 1.5rem));
+  }
 }

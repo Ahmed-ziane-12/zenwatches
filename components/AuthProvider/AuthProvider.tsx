@@ -18,31 +18,58 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function readStoredUser(): User | null {
+  try {
+    const stored = localStorage.getItem("user");
+    return stored ? (JSON.parse(stored) as User) : null;
+  } catch (error) {
+    console.error("Error loading user from localStorage:", error);
+    return null;
+  }
+}
+
+function persistUser(user: User | null) {
+  try {
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+  } catch (error) {
+    // Storage can be blocked (private mode); the in-memory session still works.
+    console.error("Error saving user to localStorage:", error);
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("user");
-      if (stored) {
-        setUser(JSON.parse(stored));
+    setUser(readStoredUser());
+    setLoading(false);
+  }, []);
+
+  // Keep other tabs in sync when the visitor signs in or out elsewhere.
+  useEffect(() => {
+    function handleStorage(event: StorageEvent) {
+      if (event.key !== "user") return;
+      try {
+        setUser(event.newValue ? (JSON.parse(event.newValue) as User) : null);
+      } catch {
+        setUser(null);
       }
-    } catch (error) {
-      console.error("Error loading user from localStorage:", error);
-    } finally {
-      setLoading(false);
     }
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const signIn = (userData: User) => {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    persistUser(userData);
   };
 
   const signOut = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    persistUser(null);
   };
 
   const value: AuthContextValue = {

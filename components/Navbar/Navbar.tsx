@@ -17,7 +17,7 @@ const LANGUAGES = ["AR", "EN", "FR"] as const;
 export default function Navbar() {
   const { count, open } = useCart();
   const { language, setLanguage, t } = useLanguage();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const locale = language === "AR" ? "ar" : language === "EN" ? "en" : "fr";
@@ -102,17 +102,53 @@ export default function Navbar() {
               {count}
             </span>
           </button>
-          {user ? (
-            <ProfileDropdown />
-          ) : (
-            <Link
-              href={`/${locale}/signin`}
-              className={`${styles.cart} ${styles.signIn}`}
-            >
-              <User size={18} />
-              <span className={styles.signInLabel}>{t("navbar.signIn")}</span>
-            </Link>
-          )}
+          <div className={styles.authSlot}>
+            <AnimatePresence mode="wait" initial={false}>
+              {authLoading ? (
+                <motion.span
+                  key="auth-loading"
+                  className={styles.authLoading}
+                  aria-hidden="true"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <motion.span
+                    className={styles.spinner}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                  />
+                </motion.span>
+              ) : user ? (
+                <motion.div
+                  key="profile"
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.94 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                >
+                  <ProfileDropdown />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="signin"
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.94 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                >
+                  <Link
+                    href={`/${locale}/signin`}
+                    className={`${styles.cart} ${styles.signIn}`}
+                  >
+                    <User size={18} />
+                    <span className={styles.signInLabel}>{t("navbar.signIn")}</span>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </nav>
 

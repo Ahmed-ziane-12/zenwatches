@@ -93,6 +93,39 @@
   min-width: 0;
 }
 
+.authSlot {
+  display: inline-flex;
+  align-items: center;
+}
+
+.authLoading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+}
+
+.signIn {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.signIn:hover {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+  color: var(--color-gold-deep);
+}
+
 .langWrapper {
   position: relative;
 }

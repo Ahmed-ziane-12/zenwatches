@@ -3,14 +3,18 @@
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import { motion } from "motion/react";
+import { Loader2 } from "lucide-react";
 import styles from "./auth.module.css";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useAuth } from "@/components/AuthProvider/AuthProvider";
 
 export default function SignInPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
   const { t } = useLanguage();
+  const { signIn } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -36,15 +40,10 @@ export default function SignInPage() {
         throw new Error(data.error || t("auth.failedSignIn"));
       }
 
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(data.user));
-      
-      // Redirect based on role
-      if (data.user.role === "admin" || data.user.role === "super_admin") {
-        router.push(`/${locale}`);
-      } else {
-        router.push(`/${locale}`);
-      }
+      // Update the shared auth context so the navbar switches immediately.
+      signIn(data.user);
+
+      router.push(`/${locale}`);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -80,9 +79,27 @@ export default function SignInPage() {
               required
             />
           </div>
-          <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? t("auth.signingIn") : t("auth.signIn")}
-          </button>
+          <motion.button
+            type="submit"
+            className={styles.button}
+            disabled={loading}
+            whileTap={loading ? undefined : { scale: 0.985 }}
+          >
+            {loading ? (
+              <span className={styles.buttonContent}>
+                <motion.span
+                  className={styles.spinner}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                >
+                  <Loader2 size={16} />
+                </motion.span>
+                {t("auth.signingIn")}
+              </span>
+            ) : (
+              t("auth.signIn")
+            )}
+          </motion.button>
         </form>
         <p className={styles.footer}>
           {t("auth.noAccount")}{" "}
