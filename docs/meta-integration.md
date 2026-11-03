@@ -77,7 +77,7 @@ META_FEED_TOKEN=long-random-string
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 # optional
 META_FEED_LOCALE=ar
-META_FEED_BRAND=Hourwright
+META_FEED_BRAND=Zen Watches
 META_FEED_CURRENCY=DZD
 PRODUCT_IMAGE_BASE_URL=https://your-current-site.com
 ```

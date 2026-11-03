@@ -18,7 +18,7 @@ export default function WatchSprite() {
               <circle cx="100" cy="130" r="52" fill="var(--dial)"/>
               <circle cx="100" cy="130" r="44" fill="none" stroke="var(--mark)" strokeWidth="7" strokeDasharray="2.2 20.84" strokeDashoffset="1.1"/>
               <circle cx="100" cy="130" r="44" fill="none" stroke="var(--mark)" strokeWidth="10" strokeDasharray="4 65.12" strokeDashoffset="2"/>
-              <text x="100" y="110" textAnchor="middle" fontSize="5.6" letterSpacing="1.4" fill="var(--mark)">HOURWRIGHT</text>
+              <text x="100" y="110" textAnchor="middle" fontSize="5.6" letterSpacing="1.4" fill="var(--mark)">ZEN WATCHES</text>
               <text x="100" y="158" textAnchor="middle" fontSize="4.2" letterSpacing="1.2" fill="var(--mark)" fillOpacity=".7">AUTOMATIC</text>
               <g transform="rotate(-55 100 130)"><rect x="97.5" y="98" width="5" height="36" rx="2.5" fill="var(--mark)"/></g>
               <g transform="rotate(60 100 130)"><rect x="98.5" y="82" width="3" height="52" rx="1.5" fill="var(--mark)"/></g>
@@ -124,7 +124,7 @@ export default function WatchSprite() {
                 <circle cx="76" cy="106" r="2.5"/><circle cx="124" cy="106" r="2.5"/>
                 <circle cx="76" cy="154" r="2.5"/><circle cx="124" cy="154" r="2.5"/>
               </g>
-              <text x="100" y="116" textAnchor="middle" fontSize="5" letterSpacing="1.4" fill="var(--mark)">HOURWRIGHT</text>
+              <text x="100" y="116" textAnchor="middle" fontSize="5" letterSpacing="1.4" fill="var(--mark)">ZEN WATCHES</text>
               <g transform="rotate(-55 100 130)"><rect x="97.5" y="100" width="5" height="34" rx="2" fill="var(--mark)"/></g>
               <g transform="rotate(60 100 130)"><rect x="98.5" y="86" width="3" height="48" rx="1.5" fill="var(--mark)"/></g>
               <circle cx="100" cy="130" r="3.5" fill="var(--acc)"/>

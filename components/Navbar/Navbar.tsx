@@ -44,7 +44,7 @@ export default function Navbar() {
         </ul>
 
         <Link className={styles.brand} href={`/${locale}`}>
-          <Image src={"/images/logo.jpg"} alt={""} width={80} height={80} />
+          <Image src={"/images/logo.jpg"} alt="Zen Watches" width={80} height={80} />
         </Link>
 
         <div className={styles.actions}>

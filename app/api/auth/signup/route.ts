@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { isPasswordValid, passwordRequirementsError } from "@/lib/password";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
@@ -9,6 +10,10 @@ export async function POST(request: Request) {
 
     if (!email || !username || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    if (typeof password !== "string" || !isPasswordValid(password)) {
+      return NextResponse.json({ error: passwordRequirementsError() }, { status: 400 });
     }
 
     const supabase = getSupabase();

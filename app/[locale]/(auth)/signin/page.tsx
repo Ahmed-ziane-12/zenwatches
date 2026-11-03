@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Loader2 } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import styles from "./auth.module.css";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useAuth } from "@/components/AuthProvider/AuthProvider";
@@ -19,6 +19,7 @@ export default function SignInPage() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -54,31 +55,68 @@ export default function SignInPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>{t("auth.signIn")}</h1>
+        <header className={styles.header}>
+          <h1 className={styles.title}>{t("auth.signIn")}</h1>
+          <p className={styles.subtitle}>{t("auth.signInSubtitle")}</p>
+        </header>
+
         <form onSubmit={handleSubmit} className={styles.form}>
-          {error && <div className={styles.error}>{error}</div>}
+          {error && (
+            <motion.div
+              className={styles.error}
+              role="alert"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              <AlertCircle size={16} aria-hidden="true" />
+              <span>{error}</span>
+            </motion.div>
+          )}
+
           <div className={styles.field}>
             <label htmlFor="email" className={styles.label}>{t("auth.email")}</label>
-            <input
-              id="email"
-              type="email"
-              className={styles.input}
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
+            <div className={styles.inputWrap}>
+              <Mail size={16} className={styles.inputIcon} aria-hidden="true" />
+              <input
+                id="email"
+                type="email"
+                className={styles.input}
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
           </div>
+
           <div className={styles.field}>
             <label htmlFor="password" className={styles.label}>{t("auth.password")}</label>
-            <input
-              id="password"
-              type="password"
-              className={styles.input}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
+            <div className={styles.inputWrap}>
+              <Lock size={16} className={styles.inputIcon} aria-hidden="true" />
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} ${styles.hasToggle}`}
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                className={styles.toggle}
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? t("auth.hidePassword") : t("auth.showPassword")}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+              </button>
+            </div>
           </div>
+
           <motion.button
             type="submit"
             className={styles.button}
@@ -101,6 +139,7 @@ export default function SignInPage() {
             )}
           </motion.button>
         </form>
+
         <p className={styles.footer}>
           {t("auth.noAccount")}{" "}
           <Link href={`/${locale}/signup`} className={styles.link}>

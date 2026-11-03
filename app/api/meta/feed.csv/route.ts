@@ -5,7 +5,7 @@ import { getSupabase } from "@/lib/supabase";
 export const revalidate = 3600;
 
 const DEFAULT_LOCALE = process.env.META_FEED_LOCALE || "ar";
-const FEED_BRAND = process.env.META_FEED_BRAND || "Hourwright";
+const FEED_BRAND = process.env.META_FEED_BRAND || "Zen Watches";
 const FEED_CURRENCY = process.env.META_FEED_CURRENCY || "DZD";
 
 const csv = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;

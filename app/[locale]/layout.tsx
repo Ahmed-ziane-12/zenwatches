@@ -13,7 +13,6 @@ import { translations, type Language } from "@/lib/translations";
 
 const body = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
-const STORE_DOMAIN = process.env.NEXT_PUBLIC_STORE_DOMAIN || "zenwatches";
 const STORE_NAME = process.env.NEXT_PUBLIC_STORE_NAME || "Zen Watches";
 
 function localeToLanguage(locale: string): Language {
@@ -29,7 +28,7 @@ export async function generateMetadata({
   const t = translations[localeToLanguage(locale)];
 
   return {
-    title: { default: `${STORE_DOMAIN} | ${t["meta.tagline"]}`, template: `%s | ${STORE_NAME}` },
+    title: { default: `${STORE_NAME} | ${t["meta.tagline"]}`, template: `%s | ${STORE_NAME}` },
     description: t["meta.description"],
     icons: {
       icon: "/icon.svg",

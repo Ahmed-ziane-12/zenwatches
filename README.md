@@ -1,4 +1,4 @@
-# Hourwright
+# Zen Watches
 
 Watch store hero built with Next.js (App Router), TypeScript, CSS modules and Supabase.
 

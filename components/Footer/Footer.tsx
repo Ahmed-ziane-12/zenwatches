@@ -14,7 +14,7 @@ export default function Footer() {
       <div className={styles.container}>
         <div className={styles.brandSection}>
           <Link href={`/${locale}`} className={styles.brand}>
-            <Image src={"/images/logo.jpg"} alt="Hourwright" width={60} height={60} />
+            <Image src={"/images/logo.jpg"} alt="Zen Watches" width={60} height={60} />
           </Link>
           <p className={styles.description}>
             {t("footer.description")}

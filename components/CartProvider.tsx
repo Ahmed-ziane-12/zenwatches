@@ -17,7 +17,8 @@ import { trackAddToCart } from "@/lib/meta";
 // The bag stores a snapshot of each product, because the watches now come from the database
 // and are not in any local catalogue. Prices here are for display only: checkout must look
 // the real prices up again on the server.
-const STORAGE_KEY = "hourwright-cart-v3";
+const STORAGE_KEY = "zenwatches-cart-v3";
+const LEGACY_STORAGE_KEY = "hourwright-cart-v3";
 
 export interface CartItem extends Product {
   qty: number;
@@ -97,9 +98,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Restore the saved bag after hydration so server and client markup match.
   useEffect(() => {
     try {
-      const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const raw =
+        localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+      const saved: unknown = JSON.parse(raw || "[]");
       const valid = Array.isArray(saved) ? saved.filter(isCartItem) : [];
       if (valid.length) dispatch({ type: "load", items: valid });
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {}
     setLoaded(true);
   }, []);

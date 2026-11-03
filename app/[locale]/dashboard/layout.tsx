@@ -70,7 +70,7 @@ export default function DashboardLayout({
             <Watch size={22} strokeWidth={1.8} />
           </span>
           <span className={styles.brandText}>
-            <strong>Hourwright</strong>
+            <strong>Zen Watches</strong>
             <small>Admin console</small>
           </span>
         </Link>
