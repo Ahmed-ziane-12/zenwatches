@@ -11,6 +11,7 @@ export const translations = {
     "aria.openBag": "فتح الحقيبة، {count} {itemText}",
     "aria.openMenu": "فتح القائمة",
     "aria.closeMenu": "إغلاق القائمة",
+    "aria.doombaz": "الدوّمباز",
     "aria.selectLanguage": "اختيار اللغة",
     'hero.delivery': 'توصيل الى 69 ولاية',
     'hero.title': 'اعثر على الساعة المثالية',
