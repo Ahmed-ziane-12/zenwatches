@@ -24,9 +24,9 @@ export default function Footer() {
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>{t("nav.shop")}</h3>
           <ul className={styles.links}>
-            <li><a href="#" className={styles.link}>{t("nav.watches")}</a></li>
+            <li><a href="/watches" className={styles.link}>{t("nav.watches")}</a></li>
             <li><a href="#" className={styles.link}>{t("nav.straps")}</a></li>
-            <li><a href="#" className={styles.link}>{t("nav.makers")}</a></li>
+            <li><a href="/collection" className={styles.link}>{t("nav.collection")}</a></li>
           </ul>
         </div>
 
