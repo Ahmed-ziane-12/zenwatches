@@ -97,9 +97,20 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const created = new URLSearchParams(window.location.search).get("created");
-    if (created === "1") {
-      setToast({ message: "Product created. Upload its images below.", type: "success" });
+    const search = new URLSearchParams(window.location.search);
+    if (search.get("created") === "1") {
+      const images = search.get("images");
+      if (images === "failed") {
+        setToast({
+          message:
+            "Product created, but the images could not be uploaded. Try again below.",
+          type: "error",
+        });
+      } else if (images === "uploaded") {
+        setToast({ message: "Product created with images.", type: "success" });
+      } else {
+        setToast({ message: "Product created. Add its images below.", type: "success" });
+      }
       router.replace(`/${locale}/dashboard/products/${id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

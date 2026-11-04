@@ -658,6 +658,10 @@
   overflow-y: auto;
 }
 
+.dialogBody > * + * {
+  margin-top: 0.85rem;
+}
+
 .dialogFooter {
   display: flex;
   justify-content: flex-end;

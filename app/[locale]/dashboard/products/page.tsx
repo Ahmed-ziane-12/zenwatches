@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import ProductForm from "@/components/ProductForm/ProductForm";
+import ProductImagePicker from "@/components/ProductImagePicker/ProductImagePicker";
 import { imageSrc, type AdminProduct } from "@/lib/product-admin";
 import {
   emptyProductFormValues,
@@ -63,6 +64,7 @@ export default function ProductsPage() {
   const [createValues, setCreateValues] = useState<ProductFormValues>(
     emptyProductFormValues(),
   );
+  const [createImages, setCreateImages] = useState<File[]>([]);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<AdminProduct | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -134,6 +136,7 @@ export default function ProductsPage() {
 
   const openCreate = () => {
     setCreateValues(emptyProductFormValues());
+    setCreateImages([]);
     setCreateOpen(true);
   };
 
@@ -157,9 +160,39 @@ export default function ProductsPage() {
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error || "Create failed");
 
+      const productId = data.product.id;
+      let imageState: "none" | "uploaded" | "failed" = "none";
+
+      if (createImages.length > 0) {
+        try {
+          const formData = new FormData();
+          for (const file of createImages) formData.append("files", file);
+
+          const uploadResponse = await fetch(
+            `/api/dashboard/products/${productId}/images`,
+            { method: "POST", body: formData },
+          );
+
+          if (uploadResponse.ok) {
+            imageState = "uploaded";
+          } else {
+            imageState = "failed";
+            const uploadData = await uploadResponse.json().catch(() => ({}));
+            console.error("Error uploading product images:", uploadData?.error);
+          }
+        } catch (err) {
+          imageState = "failed";
+          console.error("Error uploading product images:", err);
+        }
+      }
+
       setCreateOpen(false);
-      setToast({ message: "Product created. Add images next.", type: "success" });
-      router.push(`/${locale}/dashboard/products/${data.product.id}?created=1`);
+      setCreateValues(emptyProductFormValues());
+      setCreateImages([]);
+
+      const query = new URLSearchParams({ created: "1" });
+      if (imageState !== "none") query.set("images", imageState);
+      router.push(`/${locale}/dashboard/products/${productId}?${query.toString()}`);
     } catch (err) {
       console.error("Error creating product:", err);
       setToast({
@@ -506,7 +539,7 @@ export default function ProductsPage() {
                     New product
                   </h2>
                   <p className={styles.dialogSubtitle}>
-                    Add the essentials now — you can upload images after saving.
+                    Add the essentials and upload images in one go.
                   </p>
                 </div>
                 <button
@@ -526,6 +559,11 @@ export default function ProductsPage() {
                   onChange={setCreateValues}
                   disabled={creating}
                   compact
+                />
+                <ProductImagePicker
+                  files={createImages}
+                  onChange={setCreateImages}
+                  disabled={creating}
                 />
               </div>
 

@@ -13,14 +13,25 @@ type ProductDetailProps = {
   product: Product;
 };
 
+/** Local paths need a leading slash; Supabase/CDN URLs must be left untouched. */
+function resolveImageSrc(value: string | null | undefined): string {
+  if (!value) return "/images/product.jpg";
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith("data:")) return value;
+  return value.startsWith("/") ? value : `/${value}`;
+}
+
 export default function ProductDetail({ product }: ProductDetailProps) {
   const { add } = useCart();
   const { t } = useLanguage();
   const p: any = product as any;
   const fallbackImage = "/images/product.jpg";
-  const initialImage = p.imageUrl || p.image || (Array.isArray(p.images) ? p.images[0] : null) || fallbackImage;
+  const initialImage = resolveImageSrc(
+    p.imageUrl || p.image || (Array.isArray(p.images) ? p.images[0] : null) || fallbackImage,
+  );
   const [selectedImage, setSelectedImage] = useState(initialImage);
-  const images = Array.isArray(p.images) && p.images.length > 0 ? p.images : [selectedImage];
+  const images = (
+    Array.isArray(p.images) && p.images.length > 0 ? p.images : [selectedImage]
+  ).map((image: string) => resolveImageSrc(image));
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
 
@@ -165,18 +176,18 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   return (
     <div className={styles.container}>
       <div className={styles.imageSection}>
-        <Image width={800} height={500} src={`${selectedImage}`} alt={product.name} className={styles.mainImage} />
+        <Image width={800} height={500} src={selectedImage} alt={product.name} className={styles.mainImage} />
         {images.length > 1 && (
           <div className={styles.thumbnails}>
             {images.map((img: string, idx: number) => (
               <Image
-                key={idx}
-                src={`/${img}`}
+                key={img}
+                src={resolveImageSrc(img)}
                 width={80}
                 height={80}
                 alt={`${product.name} ${idx + 1}`}
                 className={styles.thumbnail}
-                onClick={() => setSelectedImage(`/${img}`)}
+                onClick={() => setSelectedImage(resolveImageSrc(img))}
               />
             ))}
           </div>
