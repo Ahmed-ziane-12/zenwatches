@@ -1,0 +1,676 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding-bottom: 2rem;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.headIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(201, 164, 92, 0.24), rgba(201, 164, 92, 0.06));
+  border: 1px solid rgba(201, 164, 92, 0.3);
+  box-shadow: 0 8px 22px rgba(201, 164, 92, 0.14);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--fg);
+}
+
+.countPill {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(201, 164, 92, 0.14);
+  border: 1px solid rgba(201, 164, 92, 0.3);
+}
+
+.subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.16s ease, color 0.16s ease;
+}
+
+.ghostButton:hover:not(:disabled) {
+  border-color: rgba(201, 164, 92, 0.6);
+  color: var(--accent);
+}
+
+.ghostButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Stats ---------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statValue {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+/* ---------- Card / toolbar ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(13, 26, 20, 0.04);
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 380px;
+  min-width: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.6rem 2.2rem 0.6rem 2.3rem;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 65%, transparent);
+  color: var(--fg);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.searchInput::placeholder {
+  color: var(--muted);
+}
+
+.searchInput:focus {
+  border-color: rgba(201, 164, 92, 0.65);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.14);
+}
+
+.clearSearch {
+  position: absolute;
+  inset-inline-end: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.clearSearch:hover {
+  color: var(--fg);
+}
+
+.toolbarHint {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.toolbarHint code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--fg) 7%, transparent);
+  font-size: 0.72rem;
+}
+
+/* ---------- Table ---------- */
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.table thead th {
+  padding: 0.7rem 1.15rem;
+  text-align: start;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.actionsHead {
+  text-align: end !important;
+}
+
+.row {
+  transition: background 0.14s ease;
+}
+
+.row + .row td,
+.rowEditing + .row td,
+.row + .rowEditing td {
+  border-top: 1px solid var(--line);
+}
+
+.row:hover {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.rowEditing {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.rowEditing td {
+  border-top: 1px solid rgba(201, 164, 92, 0.35);
+}
+
+.table td {
+  padding: 0.7rem 1.15rem;
+  color: var(--fg);
+  vertical-align: middle;
+}
+
+.wilayaCell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 150px;
+}
+
+.wilayaIcon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  color: var(--accent);
+  background: rgba(201, 164, 92, 0.13);
+  border: 1px solid rgba(201, 164, 92, 0.24);
+}
+
+.wilayaName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.priceValue {
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.priceMuted {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.priceInput {
+  width: 110px;
+  padding: 0.42rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.priceInput:focus {
+  border-color: rgba(201, 164, 92, 0.7);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.14);
+}
+
+/* ---------- Desks ---------- */
+
+.deskList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-width: 420px;
+}
+
+.deskChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.deskChipEditable {
+  padding-inline-end: 0.2rem;
+  background: rgba(201, 164, 92, 0.1);
+  border-color: rgba(201, 164, 92, 0.3);
+}
+
+.deskChipRemove {
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.deskChipRemove:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.moreChip {
+  color: var(--accent);
+  background: rgba(201, 164, 92, 0.14);
+  border-color: rgba(201, 164, 92, 0.3);
+  font-weight: 600;
+}
+
+.officeEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 230px;
+}
+
+.officeAddRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.officeInput {
+  width: 170px;
+  padding: 0.36rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.76rem;
+  outline: none;
+}
+
+.officeInput:focus {
+  border-color: rgba(201, 164, 92, 0.7);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.14);
+}
+
+.addButton {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 164, 92, 0.35);
+  background: rgba(201, 164, 92, 0.12);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.14s ease;
+}
+
+.addButton:hover {
+  background: rgba(201, 164, 92, 0.22);
+}
+
+/* ---------- Actions ---------- */
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+}
+
+.iconButton:hover:not(:disabled) {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border-color: color-mix(in srgb, var(--fg) 20%, var(--line));
+}
+
+.iconButton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.saveButton {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.saveButton:hover:not(:disabled) {
+  color: #065f46;
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* ---------- Footer / states ---------- */
+
+.tableFooter {
+  padding: 0.7rem 1.15rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.74rem;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--bg) 45%, transparent);
+}
+
+.loadingBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.emptyText {
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 36ch;
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  inset-inline-end: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: min(360px, calc(100vw - 2rem));
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.8rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.toast svg {
+  flex-shrink: 0;
+  color: #10b981;
+}
+
+.toastError {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.toastError svg {
+  color: #ef4444;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .tableWrap {
+    overflow: visible;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    padding: 0.9rem 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .row + .row td,
+  .rowEditing + .row td,
+  .row + .rowEditing td,
+  .rowEditing td {
+    border-top: none;
+  }
+
+  .table td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    text-align: end;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    padding-top: 0.15rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .wilayaCell,
+  .deskList,
+  .rowActions {
+    justify-content: flex-end;
+  }
+
+  .deskList {
+    max-width: none;
+  }
+
+  .officeEditor {
+    align-items: flex-end;
+  }
+
+  .tableFooter {
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    align-items: flex-start;
+  }
+
+  .ghostButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .headIcon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchWrap {
+    max-width: none;
+  }
+
+  .toolbarHint {
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}

@@ -6,10 +6,12 @@ import { useEffect } from "react";
 import Link from "next/link";
 import {
   Home,
+  Package,
   ShoppingCart,
   LogOut,
   ShieldCheck,
   Store,
+  Truck,
   Watch,
 } from "lucide-react";
 import styles from "./dashboard.module.css";
@@ -95,6 +97,24 @@ export default function DashboardLayout({
               <ShoppingCart size={17} />
             </span>
             <span>Orders</span>
+          </Link>
+          <Link
+            href={`${basePath}/products`}
+            className={`${styles.navLink} ${pathname.includes("/products") ? styles.navLinkActive : ""}`}
+          >
+            <span className={styles.navIcon}>
+              <Package size={17} />
+            </span>
+            <span>Products</span>
+          </Link>
+          <Link
+            href={`${basePath}/delivery`}
+            className={`${styles.navLink} ${pathname.includes("/delivery") ? styles.navLinkActive : ""}`}
+          >
+            <span className={styles.navIcon}>
+              <Truck size={17} />
+            </span>
+            <span>Delivery</span>
           </Link>
         </nav>
 

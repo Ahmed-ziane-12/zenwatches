@@ -31,8 +31,6 @@ export default function CheckoutPage() {
 
   const handleOrderSubmit = async (data: OrderFormData) => {
     try {
-      const shippingCost = data.deliveryType === "home" ? 600 : 400;
-
       const response = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,16 +53,18 @@ export default function CheckoutPage() {
       }
 
       const result = await response.json();
+      const order = result.order;
       setOrderDetails({
-        order: result.order,
+        order,
         formData: data,
         items,
-        subtotal,
-        shippingCost,
+        subtotal: Number(order?.products_total ?? subtotal),
+        shippingCost: Number(order?.shipping_cost ?? 0),
+        grandTotal: Number(order?.grand_total ?? subtotal),
       });
       trackPurchase({
-        eventId: result.eventId || `purchase_${result.order?.id}`,
-        value: Number(result.order?.grand_total ?? subtotal + shippingCost),
+        eventId: result.eventId || `purchase_${order?.id}`,
+        value: Number(order?.grand_total ?? subtotal),
         contentIds: items.map((item: any) => String(item.id)),
         contents: items.map((item: any) => ({
           id: String(item.id),
@@ -106,7 +106,8 @@ export default function CheckoutPage() {
   }
 
   if (orderSuccess && orderDetails) {
-    const { formData, items: orderedItems, subtotal: orderSubtotal, shippingCost } = orderDetails;
+    const { formData, items: orderedItems, subtotal: orderSubtotal, shippingCost, grandTotal } = orderDetails;
+    const orderTotal = grandTotal ?? orderSubtotal + shippingCost;
     return (
       <div className={styles.wrapper}>
         <div className={styles.successCard}>
@@ -156,7 +157,7 @@ export default function CheckoutPage() {
               <div className={styles.divider} />
               <div className={styles.totalRow}>
                 <span className={styles.totalLabel}>{t("order.totalPrice")}</span>
-                <span className={styles.totalValue}>{(orderSubtotal + shippingCost).toLocaleString()} {orderedItems[0]?.currency || "DA"}</span>
+                <span className={styles.totalValue}>{orderTotal.toLocaleString()} {orderedItems[0]?.currency || "DA"}</span>
               </div>
             </div>
           </div>

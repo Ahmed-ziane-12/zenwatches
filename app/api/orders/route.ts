@@ -1,10 +1,55 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { sendCapiEvent } from "@/lib/capi";
-import dz from "geoalgeria";
+import { shippingPrices, officeLocations } from "@/lib/delivery";
 
-const STOP_DESK_FEE = 400;
-const HOME_DELIVERY_FEE = 600;
+type DeliveryType = "home" | "desk";
+
+type DeliveryResolution =
+  | {
+      ok: true;
+      deliveryType: DeliveryType;
+      wilayaName: string;
+      communeName: string;
+      shippingCost: number;
+    }
+  | { ok: false; error: string };
+
+function resolveDelivery(
+  wilaya: unknown,
+  commune: unknown,
+  deliveryType: unknown,
+): DeliveryResolution {
+  if (typeof wilaya !== "string" || !shippingPrices[wilaya]) {
+    return { ok: false, error: "Invalid wilaya" };
+  }
+
+  const type: DeliveryType = deliveryType === "home" ? "home" : "desk";
+  const communeName = typeof commune === "string" ? commune.trim() : "";
+
+  if (!communeName) {
+    return { ok: false, error: "Missing commune" };
+  }
+
+  if (type === "desk") {
+    const offices = officeLocations[wilaya] ?? [];
+    if (offices.length === 0) {
+      return { ok: false, error: "Stop-desk delivery is not available in this wilaya" };
+    }
+    if (!offices.includes(communeName)) {
+      return { ok: false, error: "Invalid stop-desk location" };
+    }
+  }
+
+  const prices = shippingPrices[wilaya];
+  return {
+    ok: true,
+    deliveryType: type,
+    wilayaName: wilaya,
+    communeName,
+    shippingCost: type === "home" ? prices.home : prices.desk,
+  };
+}
 
 function cookieValue(request: Request, name: string): string | undefined {
   const header = request.headers.get("cookie");
@@ -121,8 +166,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const deliveryTypeNormalized = deliveryType === "home" ? "home" : "desk";
-    const shippingCostCalc = deliveryTypeNormalized === "home" ? HOME_DELIVERY_FEE : STOP_DESK_FEE;
+    const delivery = resolveDelivery(wilaya, commune, deliveryType);
+    if (!delivery.ok) {
+      return NextResponse.json({ error: delivery.error }, { status: 400 });
+    }
+    const {
+      deliveryType: deliveryTypeNormalized,
+      wilayaName,
+      communeName,
+      shippingCost: shippingCostCalc,
+    } = delivery;
 
     // Handle cart order (multiple items)
     if (Array.isArray(items) && items.length > 0) {
@@ -161,28 +214,6 @@ export async function POST(request: Request) {
       }
 
       const grandTotal = productsTotal + shippingCostCalc;
-
-      // Resolve wilaya and commune names
-      let wilayaName = wilaya;
-      try {
-        const wilayaId = parseInt(wilaya);
-        const w = dz.wilayas?.find((x: any) => x.code == wilayaId || x.id == wilayaId);
-        if (w) {
-          wilayaName = (w as any).name_fr || (w as any).name || wilaya;
-        }
-      } catch {}
-
-      let communeName = commune;
-      try {
-        if (commune) {
-          const wilayaId = parseInt(wilaya);
-          const communesList = dz.getCommunesByWilaya(wilayaId);
-          const c = communesList?.find((x: any) => x.code_commune == commune || x.id == commune);
-          if (c) {
-            communeName = (c as any).name_fr || (c as any).name || commune;
-          }
-        }
-      } catch {}
 
       const orderData: any = {
         customer_name: fullName,
@@ -265,27 +296,6 @@ export async function POST(request: Request) {
     const unitPrice = Number(product.price) || 0;
     const productsTotal = unitPrice * qty;
     const grandTotal = productsTotal + shippingCostCalc;
-
-    let wilayaName = wilaya;
-    try {
-      const wilayaId = parseInt(wilaya);
-      const w = dz.wilayas?.find((x: any) => x.code == wilayaId || x.id == wilayaId);
-      if (w) {
-        wilayaName = (w as any).name_fr || (w as any).name || wilaya;
-      }
-    } catch {}
-
-    let communeName = commune;
-    try {
-      if (commune) {
-        const wilayaId = parseInt(wilaya);
-        const communesList = dz.getCommunesByWilaya(wilayaId);
-        const c = communesList?.find((x: any) => x.code_commune == commune || x.id == commune);
-        if (c) {
-          communeName = (c as any).name_fr || (c as any).name || commune;
-        }
-      }
-    } catch {}
 
     const orderData: any = {
       customer_name: fullName,

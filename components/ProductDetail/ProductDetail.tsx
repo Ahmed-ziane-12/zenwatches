@@ -39,7 +39,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const handleOrderSubmit = async (data: OrderFormData) => {
     try {
       const productTotal = (product.price || 0) * (data.quantity || 1);
-      const shippingCost = data.deliveryType === "home" ? 600 : 400;
 
       const response = await fetch("/api/orders", {
         method: "POST",
@@ -61,16 +60,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       }
 
       const result = await response.json();
+      const order = result.order;
+      const orderedTotal = Number(order?.products_total ?? productTotal);
+      const shippingCost = Number(order?.shipping_cost ?? 0);
+      const grandTotal = Number(order?.grand_total ?? orderedTotal + shippingCost);
       setOrderDetails({
-        order: result.order,
+        order,
         formData: data,
         product,
-        productTotal,
+        productTotal: orderedTotal,
         shippingCost,
+        grandTotal,
       });
       trackPurchase({
-        eventId: result.eventId || `purchase_${result.order?.id}`,
-        value: Number(result.order?.grand_total ?? productTotal + shippingCost),
+        eventId: result.eventId || `purchase_${order?.id}`,
+        value: grandTotal,
         contentIds: [String(product.id)],
         contents: [{ id: String(product.id), quantity: data.quantity || 1 }],
       });
@@ -87,7 +91,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   };
 
   if (orderSuccess && orderDetails) {
-    const { formData, product: orderedProduct, productTotal, shippingCost } = orderDetails;
+    const { formData, product: orderedProduct, productTotal, shippingCost, grandTotal } = orderDetails;
+    const orderTotal = grandTotal ?? formData.totalPrice;
     return (
       <div className={styles.container} style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--line)" }}>
@@ -133,7 +138,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid var(--line)", fontWeight: "bold" }}>
                 <span style={{ color: "var(--text)" }}>{t("order.total")}</span>
-                <span style={{ color: "var(--text)" }}>{formData.totalPrice.toLocaleString()} {orderedProduct.currency || "DA"}</span>
+                <span style={{ color: "var(--text)" }}>{orderTotal.toLocaleString()} {orderedProduct.currency || "DA"}</span>
               </div>
             </div>
           </div>
