@@ -248,7 +248,7 @@ export default function DeliveryPage() {
             )}
           </div>
           <p className={styles.toolbarHint}>
-            Changes are written to <code>lib/delivery.ts</code>.
+            Changes are saved to the Supabase <code>delivery</code> table.
           </p>
         </div>
 

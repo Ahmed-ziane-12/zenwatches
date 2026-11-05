@@ -8,9 +8,11 @@ import styles from "./ProductDetail.module.css";
 import Image from "next/image";
 import { useLanguage } from "../LanguageProvider";
 import { trackInitiateCheckout, trackPurchase, trackViewContent } from "@/lib/meta";
+import type { DeliveryConfig } from "@/lib/delivery-types";
 
 type ProductDetailProps = {
   product: Product;
+  delivery: DeliveryConfig;
 };
 
 /** Local paths need a leading slash; Supabase/CDN URLs must be left untouched. */
@@ -20,7 +22,7 @@ function resolveImageSrc(value: string | null | undefined): string {
   return value.startsWith("/") ? value : `/${value}`;
 }
 
-export default function ProductDetail({ product }: ProductDetailProps) {
+export default function ProductDetail({ product, delivery }: ProductDetailProps) {
   const { add } = useCart();
   const { t } = useLanguage();
   const p: any = product as any;
@@ -235,6 +237,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </div>
         ) : (
           <OrderForm
+            delivery={delivery}
             onOrderSubmit={handleOrderSubmit}
             onAddToCart={handleAddToCart}
             onInitiateCheckout={() =>

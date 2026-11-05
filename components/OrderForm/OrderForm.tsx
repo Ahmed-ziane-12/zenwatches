@@ -18,7 +18,7 @@ import {
   User,
 } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { shippingPrices, officeLocations } from "@/lib/delivery";
+import type { DeliveryConfig } from "@/lib/delivery-types";
 import styles from "./OrderForm.module.css";
 
 export type OrderFormData = {
@@ -33,6 +33,7 @@ export type OrderFormData = {
 };
 
 type OrderFormProps = {
+  delivery: DeliveryConfig;
   onOrderSubmit?: (data: OrderFormData) => void;
   onAddToCart?: () => void;
   /** Fired once, the first time the visitor interacts with the form. */
@@ -53,6 +54,7 @@ function RequiredMark() {
 }
 
 export default function OrderForm({
+  delivery,
   onOrderSubmit,
   onAddToCart,
   onInitiateCheckout,
@@ -63,7 +65,8 @@ export default function OrderForm({
   quantity = true,
 }: OrderFormProps) {
   const { t } = useLanguage();
-  const wilayas = useMemo(() => Object.keys(shippingPrices), []);
+  const { shippingPrices, officeLocations } = delivery;
+  const wilayas = useMemo(() => Object.keys(shippingPrices), [shippingPrices]);
   const checkoutStarted = useRef(false);
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",

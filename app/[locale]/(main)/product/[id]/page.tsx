@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { getProductById } from "@/lib/product-by-id";
 import ProductDetail from "@/components/ProductDetail/ProductDetail";
 import { notFound } from "next/navigation";
+import { loadDelivery } from "@/lib/delivery-data";
+
+export const dynamic = "force-dynamic";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
 
@@ -58,11 +61,14 @@ export default async function ProductPage({
   params: Promise<{ locale: string; id: string }>;
 }) {
   const resolvedParams = await params;
-  const product = await getProductById(resolvedParams.id);
+  const [product, delivery] = await Promise.all([
+    getProductById(resolvedParams.id),
+    loadDelivery(),
+  ]);
 
   if (!product) {
     notFound();
   }
 
-  return <ProductDetail product={product} />;
+  return <ProductDetail product={product} delivery={delivery} />;
 }

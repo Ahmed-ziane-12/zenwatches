@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { sendCapiEvent } from "@/lib/capi";
-import { shippingPrices, officeLocations } from "@/lib/delivery";
+import { loadDelivery } from "@/lib/delivery-data";
+import type { DeliveryConfig } from "@/lib/delivery-types";
 
 type DeliveryType = "home" | "desk";
 
@@ -16,11 +17,12 @@ type DeliveryResolution =
   | { ok: false; error: string };
 
 function resolveDelivery(
+  config: DeliveryConfig,
   wilaya: unknown,
   commune: unknown,
   deliveryType: unknown,
 ): DeliveryResolution {
-  if (typeof wilaya !== "string" || !shippingPrices[wilaya]) {
+  if (typeof wilaya !== "string" || !config.shippingPrices[wilaya]) {
     return { ok: false, error: "Invalid wilaya" };
   }
 
@@ -32,7 +34,7 @@ function resolveDelivery(
   }
 
   if (type === "desk") {
-    const offices = officeLocations[wilaya] ?? [];
+    const offices = config.officeLocations[wilaya] ?? [];
     if (offices.length === 0) {
       return { ok: false, error: "Stop-desk delivery is not available in this wilaya" };
     }
@@ -41,7 +43,7 @@ function resolveDelivery(
     }
   }
 
-  const prices = shippingPrices[wilaya];
+  const prices = config.shippingPrices[wilaya];
   return {
     ok: true,
     deliveryType: type,
@@ -166,7 +168,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const delivery = resolveDelivery(wilaya, commune, deliveryType);
+    const deliveryConfig = await loadDelivery();
+    const delivery = resolveDelivery(deliveryConfig, wilaya, commune, deliveryType);
     if (!delivery.ok) {
       return NextResponse.json({ error: delivery.error }, { status: 400 });
     }
