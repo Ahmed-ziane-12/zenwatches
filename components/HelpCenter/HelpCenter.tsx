@@ -19,7 +19,6 @@ const FAQS = [
   { questionKey: "help.faq.q2", answerKey: "help.faq.a2" },
   { questionKey: "help.faq.q3", answerKey: "help.faq.a3" },
   { questionKey: "help.faq.q4", answerKey: "help.faq.a4" },
-  { questionKey: "help.faq.q5", answerKey: "help.faq.a5" },
 ] as const;
 
 export default function HelpCenter() {
