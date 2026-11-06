@@ -21,7 +21,8 @@ import styles from "./WatchesCatalog.module.css";
 const CATEGORY_KEYS: Record<string, string> = {
   men: "watches.category.men",
   women: "watches.category.women",
-  smart: "watches.category.smart",
+  luxury: "watches.category.luxury",
+  unisex: "watches.category.unisex",
   accessories: "watches.category.accessories",
 };
 

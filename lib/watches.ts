@@ -6,7 +6,7 @@ import { artFor, type Product } from "./products";
 // Everything that depends on database layout is in this block.
 // ---------------------------------------------------------------------------
 const TABLE = "products";
-const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand";
+const COLUMNS = "id, name, price, currency, image, images, availability, stock, specs, colors, brand, category";
 
 const POOL_LIMIT = 1000;
 
@@ -22,6 +22,7 @@ interface ProductRow {
   specs: unknown;
   colors: unknown;
   brand?: string | null;
+  category?: string | null;
 }
 
 type Availability = "available" | "limited" | "sold-out";
@@ -72,6 +73,7 @@ function toProduct(row: ProductRow): Product {
     imageUrl: imageUrlOf(row),
     art: artFor(id),
     brand: row.brand || null,
+    category: row.category || null,
     stock: row.stock,
     colors,
   } as Product;

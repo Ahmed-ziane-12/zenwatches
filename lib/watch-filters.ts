@@ -4,7 +4,8 @@ import type { Product } from "@/lib/products";
 export const CATEGORIES = [
   { value: "men", label: "Men" },
   { value: "women", label: "Women" },
-  { value: "smart", label: "Smart" },
+  { value: "luxury", label: "Luxury" },
+  { value: "unisex", label: "Unisex" },
   { value: "accessories", label: "Accessories" },
 ] as const;
 
