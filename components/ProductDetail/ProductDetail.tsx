@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Product } from "@/lib/products";
 import { useCart } from "@/components/CartProvider";
 import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
@@ -39,6 +39,28 @@ export default function ProductDetail({ product, delivery }: ProductDetailProps)
 
   const soldOut =
     typeof p.stock === "number" ? p.stock <= 0 : p.availability === "sold-out";
+
+  const productSpecs = useMemo<Record<string, string> | null>(() => {
+    const source =
+      p.specs && typeof p.specs === "object" && !Array.isArray(p.specs) ? p.specs : {};
+    const entries: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(source)) {
+      if (value === null || value === undefined) continue;
+      const text = String(value).trim();
+      if (text) entries[key] = text;
+    }
+
+    for (const [key, value] of [
+      ["movement", p.movement],
+      ["caseSize", p.caseSize],
+      ["waterResistance", p.waterResistance],
+    ] as const) {
+      if (!entries[key] && value) entries[key] = String(value);
+    }
+
+    return Object.keys(entries).length > 0 ? entries : null;
+  }, [p.specs, p.movement, p.caseSize, p.waterResistance]);
 
   useEffect(() => {
     trackViewContent({
@@ -207,7 +229,7 @@ export default function ProductDetail({ product, delivery }: ProductDetailProps)
           {p.description || product.spec || t("product.defaultDesc")}
         </p>
 
-        {(p.movement || p.caseSize || p.waterResistance) && (
+        {soldOut && (p.movement || p.caseSize || p.waterResistance) && (
           <div className={styles.specs}>
             {p.movement && (
               <div className={styles.specItem}>
@@ -251,6 +273,7 @@ export default function ProductDetail({ product, delivery }: ProductDetailProps)
             currency={product.currency || "DA"}
             colors={p.colors || null}
             quantity={true}
+            specs={productSpecs}
           />
         )}
       </div>

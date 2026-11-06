@@ -5,6 +5,7 @@ import {
   Check,
   ChevronDown,
   ClipboardList,
+  Info,
   MapPin,
   Minus,
   Phone,
@@ -43,7 +44,21 @@ type OrderFormProps = {
   currency?: string;
   colors?: string[] | null;
   quantity?: boolean;
+  /** Free-form product specs shown in an accordion (open by default). */
+  specs?: Record<string, string> | null;
 };
+
+const SPEC_LABEL_KEYS: Record<string, string> = {
+  movement: "product.movement",
+  casesize: "product.caseSize",
+  waterresistance: "product.waterResistance",
+};
+
+function specLabel(key: string, t: (key: any) => string): string {
+  const normalized = key.toLowerCase().replace(/[\s_-]+/g, "");
+  const translationKey = SPEC_LABEL_KEYS[normalized];
+  return translationKey ? t(translationKey) : key;
+}
 
 function RequiredMark() {
   return (
@@ -63,10 +78,18 @@ export default function OrderForm({
   currency = "DA",
   colors,
   quantity = true,
+  specs,
 }: OrderFormProps) {
   const { t } = useLanguage();
   const { shippingPrices, officeLocations } = delivery;
   const wilayas = useMemo(() => Object.keys(shippingPrices), [shippingPrices]);
+  const specEntries = useMemo(
+    () =>
+      Object.entries(specs ?? {})
+        .map(([key, value]) => ({ key, value: String(value ?? "").trim() }))
+        .filter((entry) => entry.key.trim() !== "" && entry.value !== ""),
+    [specs],
+  );
   const checkoutStarted = useRef(false);
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",
@@ -156,6 +179,28 @@ export default function OrderForm({
           {t("order.payOnDelivery")}
         </span>
       </header>
+
+      {specEntries.length > 0 && (
+        <details className={styles.specsAccordion} open>
+          <summary className={styles.specsSummary}>
+            <span className={styles.specsSummaryText}>
+              <span className={styles.specsIcon}>
+                <Info size={15} />
+              </span>
+              {t("order.specifications")}
+            </span>
+            <ChevronDown size={16} className={styles.specsChevron} aria-hidden="true" />
+          </summary>
+          <dl className={styles.specsList}>
+            {specEntries.map(({ key, value }) => (
+              <div key={key} className={styles.specsRow}>
+                <dt>{specLabel(key, t)}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      )}
 
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
