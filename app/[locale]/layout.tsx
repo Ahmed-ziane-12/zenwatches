@@ -56,6 +56,15 @@ export default async function LocaleLayout({
 
   return (
     <html lang={lang} dir={dir} className={`${body.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Apply the saved theme before the first paint so full page loads keep the chosen theme. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();",
+          }}
+        />
+      </head>
       <body>
         <LanguageProvider locale={locale}>
           <AuthProvider>

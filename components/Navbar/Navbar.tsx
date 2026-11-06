@@ -38,9 +38,9 @@ export default function Navbar() {
         </button>
 
         <ul className={styles.links}>
-          <li><a href={`/${locale}/watches`}>{t("nav.watches")}</a></li>
-          <li><a href={`/${locale}/collection`}>{t("nav.collection")}</a></li>
-          <li><a href={`/${locale}/help`}>{t("nav.help")}</a></li>
+          <li><Link href={`/${locale}/watches`}>{t("nav.watches")}</Link></li>
+          <li><Link href={`/${locale}/collection`}>{t("nav.collection")}</Link></li>
+          <li><Link href={`/${locale}/help`}>{t("nav.help")}</Link></li>
         </ul>
 
         <Link className={styles.brand} href={`/${locale}`}>
@@ -156,19 +156,19 @@ export default function Navbar() {
         <div className={styles.mobileMenu} role="menu">
           <ul className={styles.mobileLinks}>
             <li role="menuitem">
-              <a href={`/${locale}/watches`} onClick={() => setMenuOpen(false)}>
+              <Link href={`/${locale}/watches`} onClick={() => setMenuOpen(false)}>
                 {t("nav.watches")}
-              </a>
+              </Link>
             </li>
             <li role="menuitem">
-              <a href={`/${locale}/collection`} onClick={() => setMenuOpen(false)}>
+              <Link href={`/${locale}/collection`} onClick={() => setMenuOpen(false)}>
                 {t("nav.collection")}
-              </a>
+              </Link>
             </li>
             <li role="menuitem">
-              <a href={`/${locale}/help`} onClick={() => setMenuOpen(false)}>
+              <Link href={`/${locale}/help`} onClick={() => setMenuOpen(false)}>
                 {t("nav.help")}
-              </a>
+              </Link>
             </li>
             <li>
               <button

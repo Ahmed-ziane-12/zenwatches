@@ -6,7 +6,7 @@ import styles from "./ThemeToggle.module.css";
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark" | null>(null);
 
-  // The inline script in layout.js has already set data-theme; read it back once mounted.
+  // The inline script in the locale layout has already set data-theme; read it back once mounted.
   useEffect(() => {
     setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
   }, []);

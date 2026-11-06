@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link";
 import type { Product } from "@/lib/products";
 import WatchColumns from "../WatchColumns/WatchColumns";
 import styles from "./Hero.module.css";
@@ -21,8 +22,8 @@ export default function Hero({ columns }: { columns: Product[][] }) {
             {t('hero.subtitle')}
           </p>
           <div className={styles.actions}>
-            <a className={styles.btn} href={`/${locale}/watches`}>{t('hero.shopWatches')}</a>
-            <a className={styles.textLink} href={`/${locale}/collection`}>{t('hero.wristSize')}</a>
+            <Link className={styles.btn} href={`/${locale}/watches`}>{t('hero.shopWatches')}</Link>
+            <Link className={styles.textLink} href={`/${locale}/collection`}>{t('hero.wristSize')}</Link>
           </div>
           <ul className={styles.facts}>
             <li>{t('hero.fact1')}</li>

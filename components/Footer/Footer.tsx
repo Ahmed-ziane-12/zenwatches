@@ -24,9 +24,9 @@ export default function Footer() {
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>{t("nav.shop")}</h3>
           <ul className={styles.links}>
-            <li><a href={`/${locale}/watches`} className={styles.link}>{t("nav.watches")}</a></li>
+            <li><Link href={`/${locale}/watches`} className={styles.link}>{t("nav.watches")}</Link></li>
             <li><a href="#" className={styles.link}>{t("nav.straps")}</a></li>
-            <li><a href={`/${locale}/collection`} className={styles.link}>{t("nav.collection")}</a></li>
+            <li><Link href={`/${locale}/collection`} className={styles.link}>{t("nav.collection")}</Link></li>
           </ul>
         </div>
 
@@ -43,7 +43,7 @@ export default function Footer() {
           <h3 className={styles.sectionTitle}>{t("nav.company")}</h3>
           <ul className={styles.links}>
             <li><a href="#" className={styles.link}>{t("footer.about")}</a></li>
-            <li><a href={`/${locale}/help`} className={styles.link}>{t("nav.journal")}</a></li>
+            <li><Link href={`/${locale}/help`} className={styles.link}>{t("nav.journal")}</Link></li>
             <li><Link href={`/${locale}/privacy`} className={styles.link}>{t("footer.privacy")}</Link></li>
           </ul>
         </div>
