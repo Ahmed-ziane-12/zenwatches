@@ -3,6 +3,7 @@ import { getSupabase } from "@/lib/supabase";
 import { sendCapiEvent } from "@/lib/capi";
 import { loadDelivery } from "@/lib/delivery-data";
 import type { DeliveryConfig } from "@/lib/delivery-types";
+import { linkCustomerToUser, type CustomerRecord } from "@/lib/customer-link";
 
 type DeliveryType = "home" | "desk";
 
@@ -145,6 +146,25 @@ async function sendPurchaseEvent(request: Request, input: {
   }
 }
 
+/**
+ * If a signed-in client skipped phone confirmation on their profile, try to
+ * attach their order phone to an existing customers row. Never blocks the order.
+ */
+async function linkOrderCustomer(
+  userId: unknown,
+  phone: unknown,
+): Promise<CustomerRecord | null> {
+  if (userId === null || userId === undefined || userId === "") return null;
+
+  try {
+    const result = await linkCustomerToUser({ userId, phone });
+    return result.ok ? result.customer : null;
+  } catch (error) {
+    console.error("[api/orders] customer link error:", error);
+    return null;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -156,6 +176,8 @@ export async function POST(request: Request) {
       wilaya,
       commune,
       deliveryType,
+      // signed-in client, when available
+      userId,
       // single product order
       quantity,
       color,
@@ -275,7 +297,9 @@ export async function POST(request: Request) {
           .slice(0, 200),
       });
 
-      return NextResponse.json({ success: true, order, eventId }, { status: 201 });
+      const customer = await linkOrderCustomer(userId, phoneNumber);
+
+      return NextResponse.json({ success: true, order, eventId, customer }, { status: 201 });
     }
 
     // Handle single product order (backward compatible)
@@ -357,7 +381,9 @@ export async function POST(request: Request) {
       contentName: product.name,
     });
 
-    return NextResponse.json({ success: true, order, eventId }, { status: 201 });
+    const customer = await linkOrderCustomer(userId, phoneNumber);
+
+    return NextResponse.json({ success: true, order, eventId, customer }, { status: 201 });
   } catch (error: any) {
     console.error("[api/orders]", error);
     return NextResponse.json({ error: "Could not process order." }, { status: 500 });

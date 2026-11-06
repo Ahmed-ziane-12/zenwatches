@@ -6,6 +6,5 @@
 
 /* contain keeps the whole watch visible whatever the photo's proportions. */
 .photo {
-  object-fit: contain;
-  padding: 6%;
+  object-fit: cover;
 }

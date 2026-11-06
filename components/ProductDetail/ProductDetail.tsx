@@ -7,6 +7,7 @@ import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
 import styles from "./ProductDetail.module.css";
 import Image from "next/image";
 import { useLanguage } from "../LanguageProvider";
+import { useAuth } from "@/components/AuthProvider/AuthProvider";
 import { trackInitiateCheckout, trackPurchase, trackViewContent } from "@/lib/meta";
 import type { DeliveryConfig } from "@/lib/delivery-types";
 
@@ -24,6 +25,7 @@ function resolveImageSrc(value: string | null | undefined): string {
 
 export default function ProductDetail({ product, delivery }: ProductDetailProps) {
   const { add } = useCart();
+  const { user } = useAuth();
   const { t } = useLanguage();
   const p: any = product as any;
   const fallbackImage = "/images/product.jpg";
@@ -84,6 +86,7 @@ export default function ProductDetail({ product, delivery }: ProductDetailProps)
           wilaya: data.wilaya,
           commune: data.commune,
           deliveryType: data.deliveryType,
+          userId: user?.id ?? null,
           quantity: data.quantity,
           color: data.color,
           productId: product.id,

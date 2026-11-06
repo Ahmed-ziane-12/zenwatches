@@ -1,0 +1,473 @@
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 55vh;
+}
+
+.page {
+  width: min(1080px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4rem) 0 clamp(3rem, 7vw, 5rem);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 1.6rem);
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(201, 164, 92, 0.18), transparent 55%),
+    var(--surface);
+  box-shadow: 0 22px 60px rgba(13, 26, 20, 0.08);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: clamp(72px, 10vw, 96px);
+  height: clamp(72px, 10vw, 96px);
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #1a1408;
+  background: linear-gradient(135deg, #e2c98d, var(--accent) 55%, var(--color-gold-deep));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 14px 32px rgba(201, 164, 92, 0.25);
+}
+
+.identity {
+  min-width: 0;
+  flex: 1;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.title {
+  margin-top: 0.25rem;
+  overflow: hidden;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email {
+  margin-top: 0.25rem;
+  overflow: hidden;
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-self: flex-start;
+  flex-shrink: 0;
+  padding: 0.32rem 0.65rem;
+  border: 1px solid rgba(201, 164, 92, 0.3);
+  border-radius: 999px;
+  background: rgba(201, 164, 92, 0.12);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ---------- Phone confirmation ---------- */
+
+.confirmCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin-top: 1.1rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+  border: 1px solid rgba(201, 164, 92, 0.38);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(201, 164, 92, 0.13), rgba(201, 164, 92, 0.03)),
+    var(--surface);
+}
+
+.confirmIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  color: var(--accent);
+  background: rgba(201, 164, 92, 0.16);
+  border: 1px solid rgba(201, 164, 92, 0.32);
+}
+
+.confirmBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.confirmTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.confirmText {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.confirmForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.confirmLabel {
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.confirmRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.confirmInput {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  text-align: start;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.confirmInput::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.confirmInput:focus {
+  border-color: rgba(201, 164, 92, 0.75);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.16);
+}
+
+.confirmInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirmButton {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 1.1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 76%, #6f4f18));
+  color: var(--accent-ink);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    filter 150ms ease,
+    transform 150ms ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+.confirmButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.confirmError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--error);
+}
+
+.successAlert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--success) 9%, transparent);
+  color: var(--success);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.successAlert svg {
+  flex-shrink: 0;
+}
+
+/* ---------- Layout ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 1.1rem;
+  margin-top: 1.1rem;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.card {
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 14px 38px rgba(13, 26, 20, 0.05);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.cardIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(201, 164, 92, 0.24), rgba(201, 164, 92, 0.06));
+  border: 1px solid rgba(201, 164, 92, 0.3);
+}
+
+.cardTitle {
+  font-size: 0.98rem;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.cardHint {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ---------- Loyalty ---------- */
+
+.loyalty {
+  min-width: 0;
+}
+
+.loyalty > section {
+  margin: 0;
+}
+
+/* ---------- Side cards ---------- */
+
+.note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.linkedLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.customerDetails {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.customerDetails > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+}
+
+.customerDetails > div:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.customerDetails > div:last-child {
+  padding-bottom: 0;
+}
+
+.customerDetails dt {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.customerDetails dd {
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-align: end;
+  text-overflow: ellipsis;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 550;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.link svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color 150ms ease;
+}
+
+.link:hover {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+}
+
+.link:hover svg {
+  color: var(--color-gold-deep);
+}
+
+.signOut {
+  color: var(--error);
+}
+
+.signOut svg {
+  color: var(--error);
+}
+
+.signOut:hover {
+  border-color: color-mix(in srgb, var(--error) 28%, transparent);
+  background: color-mix(in srgb, var(--error) 8%, transparent);
+}
+
+.signOut:hover svg {
+  color: var(--error);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .roleBadge {
+    order: -1;
+    margin-inline-start: auto;
+  }
+
+  .confirmCard {
+    flex-direction: column;
+  }
+
+  .confirmRow {
+    flex-direction: column;
+  }
+
+  .confirmButton {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .link svg {
+    transition: none;
+  }
+}

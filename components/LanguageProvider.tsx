@@ -6,6 +6,7 @@ import { translations, type Language } from "@/lib/translations";
 
 type LanguageContextValue = {
   language: Language;
+  locale: string;
   setLanguage: (lang: Language) => void;
   t: (key: keyof (typeof translations)[Language], params?: Record<string, string | number>) => string;
   dir: "rtl" | "ltr";
@@ -22,6 +23,13 @@ const localeToLang: Record<string, Language> = {
 export function LanguageProvider({ children, locale }: { children: ReactNode; locale?: string }) {
   const pathname = usePathname();
   const router = useRouter();
+  const pathLocale = pathname.split("/").filter(Boolean)[0];
+  const currentLocale =
+    locale && localeToLang[locale]
+      ? locale
+      : pathLocale && localeToLang[pathLocale]
+        ? pathLocale
+        : "ar";
   const initialLang = locale ? (localeToLang[locale] || "AR") : "AR";
   const [language, setLanguageState] = useState<Language>(initialLang);
 
@@ -51,7 +59,7 @@ export function LanguageProvider({ children, locale }: { children: ReactNode; lo
   const dir = language === "AR" ? "rtl" : "ltr";
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
+    <LanguageContext.Provider value={{ language, locale: currentLocale, setLanguage, t, dir }}>
       {children}
     </LanguageContext.Provider>
   );

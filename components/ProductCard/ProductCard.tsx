@@ -3,8 +3,10 @@ import React from 'react'
 import styles from './ProductCard.module.css'
 import { useCart } from '../CartProvider';
 import { useLanguage } from '../LanguageProvider';
-import { Product } from '@/lib/products';
+import { formatPrice, Product } from '@/lib/products';
+import ProductImage from '../ProductImage/ProductImage';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 
 type ProductCardProps = {
   product: Product;
@@ -12,7 +14,7 @@ type ProductCardProps = {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { add } = useCart();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const p: any = product as any;
 
   if (!product) {
@@ -22,6 +24,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const stock = p.stock !== undefined && p.stock !== null ? Number(p.stock) : null;
   const isOutOfStock = stock !== null && stock <= 0;
   const isLowStock = stock !== null && stock > 0 && stock < 3;
+  const brand = p.brand || t("productCard.noBrand");
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -30,36 +33,50 @@ const ProductCard = ({ product }: ProductCardProps) => {
     add(product);
   };
 
-  const price = product.price?.toFixed ? product.price.toFixed(2) : product.price;
+  const price =
+    typeof product.price === "number"
+      ? formatPrice(product.price, product.currency || "DA")
+      : `${product.price}${product.currency || "DA"}`;
 
   return (
     <article className={styles.productCard}>
-      <Link href={`/product/${product.id}`} className={styles.productImage}>
-        <img src={product.imageUrl ? product.imageUrl : "/images/product.jpg"} alt={product.name} />
+      <Link
+        href={`/${locale}/product/${product.id}`}
+        className={styles.media}
+        aria-label={`${product.name} — ${brand}`}
+      >
+        <ProductImage
+          product={product}
+          labelled={false}
+          sizes="(max-width: 480px) 85vw, (max-width: 768px) 45vw, (max-width: 1200px) 30vw, 18vw"
+          className={styles.mediaImage}
+        />
+
+        {(isOutOfStock || isLowStock) && (
+          <span className={`${styles.badge} ${isOutOfStock ? styles.badgeOut : styles.badgeLow}`}>
+            {isOutOfStock
+              ? t("productCard.soldOut")
+              : t("productCard.lowStockShort", { count: stock ?? 0 })}
+          </span>
+        )}
       </Link>
 
       <div className={styles.productInfo}>
-        <div className={styles.productBody}>
-          <div className={styles.productName}>
-            <h3>{product.name}</h3>
-            <span className={styles.productRating}>{p.brand || t("productCard.noBrand")}</span>
-          </div>
-          <p className={styles.productSpec}>{product.spec}</p>
-          {/* Reserved slot so a missing stock label never shifts the footer. */}
-          <p className={`${styles.stockLabel} ${isOutOfStock ? styles.stockOut : isLowStock ? styles.stockLow : ""}`}>
-            {isOutOfStock ? t("productCard.soldOut") : isLowStock ? t("productCard.lowStock", { count: stock ?? 0 }) : ""}
-          </p>
-        </div>
+        <span className={styles.brand}>{brand}</span>
+        <Link href={`/${locale}/product/${product.id}`} className={styles.productName}>{product.name}</Link>
+        {product.spec && <p className={styles.productSpec}>{product.spec}</p>}
 
         <div className={styles.productFooter}>
-          <p className={styles.productPrice}>{price}{product.currency || "DA"}</p>
+          <p className={styles.productPrice} dir="ltr">{price}</p>
           <button
             type="button"
             className={styles.addToCartButton}
             onClick={handleAddToCart}
             disabled={isOutOfStock}
+            aria-label={`${t("productCard.addToCart")}: ${product.name}`}
+            title={t("productCard.addToCart")}
           >
-            {isOutOfStock ? t("productCard.soldOut") : t("productCard.addToCart")}
+            <Plus size={17} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
       </div>

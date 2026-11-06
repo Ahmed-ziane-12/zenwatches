@@ -35,12 +35,13 @@ export default function DashboardLayout({
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const locale = pathname.match(/^\/([a-z]{2})(?:\/|$)/)?.[1] || "ar";
 
   useEffect(() => {
     if (!loading && (!user || (user.role !== "admin" && user.role !== "super_admin"))) {
-      router.push("/");
+      router.push(`/${locale}`);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, locale]);
 
   if (loading) {
     return (
@@ -54,7 +55,6 @@ export default function DashboardLayout({
     return null;
   }
 
-  const locale = pathname.match(/^\/([a-z]{2})(?:\/|$)/)?.[1] || "ar";
   const basePath = `/${locale}/dashboard`;
   const isRtl = locale === "ar";
   const isSuperAdmin = user.role === "super_admin";

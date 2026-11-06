@@ -7,7 +7,7 @@ import { useLanguage } from "../LanguageProvider";
 export default function Hero({ columns }: { columns: Product[][] }) {
   // With no watches to show (database empty or unreachable) the copy takes the full width.
   const hasWatches = columns.length > 0;
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <main className={styles.wrap}>
@@ -21,8 +21,8 @@ export default function Hero({ columns }: { columns: Product[][] }) {
             {t('hero.subtitle')}
           </p>
           <div className={styles.actions}>
-            <a className={styles.btn} href="/watches">{t('hero.shopWatches')}</a>
-            <a className={styles.textLink} href="/collection">{t('hero.wristSize')}</a>
+            <a className={styles.btn} href={`/${locale}/watches`}>{t('hero.shopWatches')}</a>
+            <a className={styles.textLink} href={`/${locale}/collection`}>{t('hero.wristSize')}</a>
           </div>
           <ul className={styles.facts}>
             <li>{t('hero.fact1')}</li>

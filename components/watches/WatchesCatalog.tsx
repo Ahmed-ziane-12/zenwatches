@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Watch } from "lucide-react";
 import type { Product } from "@/lib/products"; // adjust path
 import  ProductCard  from "@/components/ProductCard/ProductCard"; 
 import { useLanguage } from "@/components/LanguageProvider";
@@ -167,16 +168,24 @@ export function WatchesCatalog({ products }: { products: Product[] }) {
 
         {/* Results */}
         <section>
-          <p className={styles.count} aria-live="polite">
-            {results.length === 1 ? t("watches.countOne") : t("watches.count", { count: results.length })}
-          </p>
+          {results.length > 0 && (
+            <p className={styles.count} aria-live="polite">
+              {results.length === 1 ? t("watches.countOne") : t("watches.count", { count: results.length })}
+            </p>
+          )}
 
           {results.length === 0 ? (
             <div className={styles.empty}>
-              <p>{t("watches.empty")}</p>
-              <button type="button" onClick={clearAll} className={styles.linkButton}>
-                {t("watches.clearAll")}
-              </button>
+              <Watch className={styles.emptyIcon} size={48} strokeWidth={1.5} aria-hidden="true" />
+              <p className={styles.emptyTitle}>{t("watches.emptyTitle")}</p>
+              <p className={styles.emptyHint}>
+                {products.length === 0 ? t("watches.empty") : t("watches.emptyFiltered")}
+              </p>
+              {hasActiveFilters(filters) && (
+                <button type="button" onClick={clearAll} className={styles.emptyAction}>
+                  {t("watches.clearAll")}
+                </button>
+              )}
             </div>
           ) : (
             <ul className={styles.grid}>

@@ -7,6 +7,8 @@ export interface User {
   email: string;
   username: string;
   role: string;
+  created_at?: string | null;
+  customer_id?: string | number | null;
 }
 
 interface AuthContextValue {

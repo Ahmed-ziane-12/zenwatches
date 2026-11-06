@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "../AuthProvider/AuthProvider";
 import { useLanguage } from "../LanguageProvider";
 import styles from "./ProfileDropdown.module.css";
@@ -93,7 +93,7 @@ export default function ProfileDropdown() {
 
             <div className={styles.divider} />
 
-            {isAdmin && (
+            {isAdmin ? (
               <>
                 <Link
                   href={`/${locale}/dashboard`}
@@ -103,6 +103,19 @@ export default function ProfileDropdown() {
                 >
                   <LayoutDashboard size={16} className={styles.menuIcon} aria-hidden="true" />
                   <span>{t("profile.dashboard")}</span>
+                </Link>
+                <div className={styles.divider} />
+              </>
+            ) : (
+              <>
+                <Link
+                  href={`/${locale}/profile`}
+                  className={styles.menuItem}
+                  role="menuitem"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <UserRound size={16} className={styles.menuIcon} aria-hidden="true" />
+                  <span>{t("profile.myProfile")}</span>
                 </Link>
                 <div className={styles.divider} />
               </>

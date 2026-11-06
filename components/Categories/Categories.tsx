@@ -15,13 +15,13 @@ const TILES = [
 
 
 const Categories = () => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <section className={styles.categories}>
         <div className={styles.sectionTitle}>
         <h2>{t("categories.title")}</h2>
-        <Link href="/watches" className={styles.exploreLink}>
+        <Link href={`/${locale}/watches`} className={styles.exploreLink}>
           {t("categories.exploreAll")} <ArrowRight size={15} />
         </Link>
       </div>
@@ -29,7 +29,7 @@ const Categories = () => {
         <ul className={styles.list}>
             {TILES.map((tile, index) => (
               <li key={index} className={styles.listItem}>
-                <Link href={tile.href} className={styles.tileLink}>
+                <Link href={`/${locale}${tile.href}`} className={styles.tileLink}>
                     <div className={styles.tileImageContainer}>
                         <img
                             src={tile.image}

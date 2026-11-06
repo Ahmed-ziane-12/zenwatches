@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         password: hashedPassword,
         role: "client",
       })
-      .select("id, email, username, role")
+      .select("id, email, username, role, created_at, customer_id")
       .single();
 
     if (error) {

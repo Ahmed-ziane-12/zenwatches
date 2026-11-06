@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/CartProvider";
 import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useAuth } from "@/components/AuthProvider/AuthProvider";
 import styles from "./checkout.module.css";
 import productStyles from "@/components/ProductDetail/ProductDetail.module.css";
 import ProductImage from "@/components/ProductImage/ProductImage";
@@ -19,7 +20,8 @@ type CheckoutClientProps = {
 
 export default function CheckoutClient({ delivery }: CheckoutClientProps) {
   const { items, subtotal, clear, setQty } = useCart() as any;
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const { user } = useAuth();
   const router = useRouter();
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
@@ -45,6 +47,7 @@ export default function CheckoutClient({ delivery }: CheckoutClientProps) {
           wilaya: data.wilaya,
           commune: data.commune,
           deliveryType: data.deliveryType,
+          userId: user?.id ?? null,
           items: items.map((item: any) => ({
             id: item.id,
             quantity: item.qty || 1,
@@ -167,7 +170,7 @@ export default function CheckoutClient({ delivery }: CheckoutClientProps) {
             </div>
           </div>
 
-          <button className={styles.continueBtn} onClick={() => router.push("/")}>
+          <button className={styles.continueBtn} onClick={() => router.push(`/${locale}`)}>
             {t("hero.explore")}
           </button>
         </div>
