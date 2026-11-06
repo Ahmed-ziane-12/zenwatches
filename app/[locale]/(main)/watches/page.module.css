@@ -84,14 +84,11 @@
   cursor: pointer;
 }
 
-.chip:hover {
-  border-color: #111;
-}
 
 .chipActive {
-  background: #111;
-  border-color: #111;
-  color: #fff;
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
 }
 
 .checks {

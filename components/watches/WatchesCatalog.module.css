@@ -54,14 +54,14 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--line);
   border-radius: 0.25rem;
   font: inherit;
-  background: #fff;
+  background: transparent;
 }
 
 .input:focus-visible {
-  outline: 2px solid #111;
+  outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
 
@@ -73,23 +73,23 @@
 
 .chip {
   padding: 0.25rem 0.75rem;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #fff;
-  color: #111;
+  background: transparent;
+  color: var(--fg);
   font: inherit;
   font-size: 0.875rem;
   cursor: pointer;
 }
 
 .chip:hover {
-  border-color: #111;
+  border-color: var(--fg);
 }
 
 .chipActive {
-  background: #111;
-  border-color: #111;
-  color: #fff;
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
 }
 
 .checks {
