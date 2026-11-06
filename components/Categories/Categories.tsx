@@ -9,7 +9,6 @@ import { useLanguage } from '@/components/LanguageProvider';
 const TILES = [
   { labelKey: "categories.mens", href: "/watches?category=men", image: "/images/men.avif" },
   { labelKey: "categories.womens", href: "/watches?category=women", image: "/images/women.avif" },
-  { labelKey: "categories.smart", href: "/watches?category=smart", image: "/images/smart.avif" },
   { labelKey: "categories.accessories", href: "/watches?category=accessories", image: "/images/accessories.avif" },
   { labelKey: "categories.luxury", href: "/watches?category=luxury", image: "/images/luxury.avif" },
 ];
