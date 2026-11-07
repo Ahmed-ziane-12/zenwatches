@@ -10,7 +10,7 @@ const COLUMNS = "id, name, price, currency, image, images, availability, stock, 
 
 const POOL_LIMIT = 1000;
 
-interface ProductRow {
+type ProductRow = {
   id: number | string;
   name: string;
   price: number | string;
@@ -23,18 +23,7 @@ interface ProductRow {
   colors: unknown;
   brand?: string | null;
   category?: string | null;
-}
-
-type Availability = "available" | "limited" | "sold-out";
-
-// Same rule your storefront uses: stock wins when present (<=0 sold out, 1-5 limited, >5 available).
-function availabilityOf(row: ProductRow): Availability {
-  if (typeof row.stock === "number") {
-    if (row.stock <= 0) return "sold-out";
-    return row.stock <= 5 ? "limited" : "available";
-  }
-  return row.availability === "sold-out" || row.availability === "limited" ? row.availability : "available";
-}
+};
 
 const strings = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && x.trim() !== "") : [];
@@ -75,6 +64,7 @@ function toProduct(row: ProductRow): Product {
     brand: row.brand || null,
     category: row.category || null,
     stock: row.stock,
+    availability: row.availability,
     colors,
   } as Product;
 }
@@ -90,7 +80,7 @@ export function shuffle<T>(items: readonly T[]): T[] {
   return out;
 }
 
-/** Picks `count` random watches that are active and not sold out. Throws if the database cannot be reached. */
+/** Picks `count` random active watches, including sold-out pieces so they can show their badge. */
 export async function getRandomWatches(count = 15): Promise<Product[]> {
   const { data, error } = await getSupabase()
     .from(TABLE)
@@ -101,7 +91,7 @@ export async function getRandomWatches(count = 15): Promise<Product[]> {
 
   if (error) throw new Error(`Supabase query failed: ${error.message}`);
 
-  return shuffle((data ?? []).filter((row) => availabilityOf(row) !== "sold-out"))
+  return shuffle(data ?? [])
     .slice(0, count)
     .map(toProduct);
 }

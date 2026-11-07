@@ -22,7 +22,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   }
 
   const stock = p.stock !== undefined && p.stock !== null ? Number(p.stock) : null;
-  const isOutOfStock = stock !== null && stock <= 0;
+  const isOutOfStock = stock !== null ? stock <= 0 : p.availability === "sold-out";
   const isLowStock = stock !== null && stock > 0 && stock < 3;
   const brand = p.brand || t("productCard.noBrand");
 
@@ -73,8 +73,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
             className={styles.addToCartButton}
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            aria-label={`${t("productCard.addToCart")}: ${product.name}`}
-            title={t("productCard.addToCart")}
+            aria-label={
+              isOutOfStock
+                ? `${t("productCard.soldOut")}: ${product.name}`
+                : `${t("productCard.addToCart")}: ${product.name}`
+            }
+            title={isOutOfStock ? t("productCard.soldOut") : t("productCard.addToCart")}
           >
             <Plus size={17} strokeWidth={2} aria-hidden="true" />
           </button>

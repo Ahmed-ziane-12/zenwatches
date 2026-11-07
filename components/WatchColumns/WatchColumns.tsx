@@ -15,7 +15,11 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
+  const stock = typeof product.stock === "number" ? product.stock : null;
+  const soldOut = stock !== null ? stock <= 0 : product.availability === "sold-out";
+
   function onAdd() {
+    if (soldOut) return;
     add(product);
     setAdded(true);
     clearTimeout(timer.current);
@@ -33,6 +37,7 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
         className={styles.art}
         sizes="(max-width: 560px) 100%, 200px"
       />
+      {soldOut && <span className={styles.soldOutBadge}>{t("productCard.soldOut")}</span>}
       <figcaption className={styles.caption}>
         <div className={styles.info}>
           <span className={styles.name}>{product.name}</span>
@@ -44,10 +49,11 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
             type="button"
             className={`${styles.add} ${added ? styles.added : ""}`}
             onClick={onAdd}
+            disabled={soldOut}
             tabIndex={clone ? -1 : undefined}
-            aria-label={t("watchColumns.addToBag", { name: label })}
+            aria-label={soldOut ? t("productCard.soldOut") : t("watchColumns.addToBag", { name: label })}
           >
-            {added ? t("watchColumns.added") : t("watchColumns.add")}
+            {soldOut ? t("productCard.soldOut") : added ? t("watchColumns.added") : t("watchColumns.add")}
           </button>
         </div>
       </figcaption>
