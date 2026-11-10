@@ -4,7 +4,7 @@ import { artFor, type Product, sampleProducts } from "./products";
 
 const TABLE = "products";
 const COLUMNS =
-  "id, name, price, currency, image, images, availability, stock, specs, colors, brand, description, full_description";
+  "id, name, price, currency, image, images, availability, stock, specs, colors, brand, description";
 
 interface ProductRow {
   id: number | string;
@@ -19,7 +19,6 @@ interface ProductRow {
   colors: unknown;
   brand?: string | null;
   description?: string | null;
-  full_description?: string | null;
 }
 
 function strings(v: unknown): string[] {
@@ -69,7 +68,7 @@ export async function getProductById(id: string): Promise<Product | null> {
       image,
       images: strings(row.images).length > 0 ? strings(row.images) : image ? [image] : [],
       brand: (row as any).brand || null,
-      description: row.description || row.full_description || null,
+      description: row.description || null,
       movement: (row as any).movement || (row.specs as any)?.movement || null,
       caseSize: (row as any).caseSize || (row.specs as any)?.caseSize || null,
       waterResistance: (row as any).waterResistance || (row.specs as any)?.waterResistance || null,
@@ -80,7 +79,11 @@ export async function getProductById(id: string): Promise<Product | null> {
       art: artFor(String(row.id)),
     };
   } catch (e) {
-    const products = sampleProducts();
-    return products.find((p) => p.id === id) || null;
+    // Never hide schema/network errors behind a fake product.
+    console.error("[product-by-id] lookup failed:", e);
+    if (process.env.NODE_ENV === "development") {
+      return sampleProducts().find((p) => p.id === id) || null;
+    }
+    return null;
   }
 }

@@ -7,7 +7,7 @@ import PromoBanners from "@/components/PromoBanners/PromoBanners";
 import Testimonials from "@/components/Testimonials/Testimonials";
 import TopBrands from "@/components/TopBrands/TopBrands";
 import { buildColumns, COLUMN_COUNT, sampleProducts, WATCHES_PER_COLUMN, type Product } from "@/lib/products";
-import { getRandomWatches, getTopBrands, shuffle, type BrandSummary } from "@/lib/watches";
+import { getBestSellers, getRandomWatches, getTopBrands, shuffle, type BrandSummary } from "@/lib/watches";
 import HomeClient from "@/components/HomeClient";
 
 // Pick a new random set on every visit. To reuse one set for a minute instead (fewer database
@@ -43,7 +43,7 @@ async function loadTopBrands(): Promise<BrandSummary[]> {
 
 export default async function Home() {
   const watches = await loadHeroWatches();
-  const bestSellers = await getRandomWatches(6);
+  const bestSellers = await getBestSellers(6);
   const brands = await loadTopBrands();
   return (
     <div className="wrapper">

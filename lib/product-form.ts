@@ -10,7 +10,6 @@ export interface ProductFormValues {
   availability: ProductAvailability;
   badge: string;
   description: string;
-  fullDescription: string;
   sortOrder: string;
   active: boolean;
   colors: string[];
@@ -36,7 +35,6 @@ export function emptyProductFormValues(): ProductFormValues {
     availability: "available",
     badge: "",
     description: "",
-    fullDescription: "",
     sortOrder: "100",
     active: true,
     colors: [],
@@ -55,7 +53,6 @@ export function valuesFromProduct(product: AdminProduct): ProductFormValues {
     availability: product.availability,
     badge: product.badge ?? "",
     description: product.description ?? "",
-    fullDescription: product.full_description ?? "",
     sortOrder: String(product.sort_order ?? 100),
     active: product.active,
     colors: [...(product.colors ?? [])],
@@ -86,7 +83,6 @@ export function payloadFromValues(values: ProductFormValues) {
     availability: values.availability,
     badge: values.badge.trim() || null,
     description: values.description.trim() || null,
-    full_description: values.fullDescription.trim() || null,
     sort_order: Number.isFinite(sortOrder) ? sortOrder : 100,
     active: values.active,
     colors: values.colors,

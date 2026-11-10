@@ -96,6 +96,59 @@ export async function getRandomWatches(count = 15): Promise<Product[]> {
     .map(toProduct);
 }
 
+/**
+ * Real best sellers: products ranked by units sold across `order_items`.
+ * Equal sales counts are shuffled, so ties and a store with no sales at all
+ * still produce a random selection instead of a fixed order.
+ */
+export async function getBestSellers(count = 6): Promise<Product[]> {
+  const supabase = getSupabase();
+
+  const [salesResult, productsResult] = await Promise.all([
+    supabase.from("order_items").select("product_id, quantity"),
+    supabase
+      .from(TABLE)
+      .select(COLUMNS)
+      .eq("active", true)
+      .limit(POOL_LIMIT)
+      .overrideTypes<ProductRow[], { merge: false }>(),
+  ]);
+
+  if (productsResult.error) {
+    throw new Error(`Supabase query failed: ${productsResult.error.message}`);
+  }
+
+  // If sales cannot be read, a random selection is better than a broken home page.
+  if (salesResult.error) {
+    console.error("[watches] could not read order_items:", salesResult.error);
+  }
+
+  const sold = new Map<string, number>();
+  for (const row of salesResult.data ?? []) {
+    if (row.product_id === null || row.product_id === undefined) continue;
+    const quantity = Number(row.quantity);
+    if (!Number.isFinite(quantity) || quantity <= 0) continue;
+    const id = String(row.product_id);
+    sold.set(id, (sold.get(id) ?? 0) + quantity);
+  }
+
+  // One bucket per sales count, highest first. Shuffling inside a bucket keeps the
+  // ranking but randomises ties, and randomises everything when nothing has sold.
+  const bySales = new Map<number, Product[]>();
+  for (const row of productsResult.data ?? []) {
+    const product = toProduct(row);
+    const total = sold.get(product.id) ?? 0;
+    const bucket = bySales.get(total);
+    if (bucket) bucket.push(product);
+    else bySales.set(total, [product]);
+  }
+
+  return [...bySales.entries()]
+    .sort(([a], [b]) => b - a)
+    .flatMap(([, bucket]) => shuffle(bucket))
+    .slice(0, count);
+}
+
 export async function getAllWatches(): Promise<Product[]> {
   const { data, error } = await getSupabase()
     .from(TABLE)

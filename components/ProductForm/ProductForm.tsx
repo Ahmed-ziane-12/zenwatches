@@ -277,31 +277,17 @@ export default function ProductForm({
       >
         <div className={styles.grid}>
           <label className={`${styles.field} ${styles.full}`}>
-            <span className={styles.label}>Short description</span>
+            <span className={styles.label}>Description</span>
             <textarea
               className={styles.textarea}
               value={values.description}
               onChange={(event) => update({ description: event.target.value })}
-              placeholder="A short summary shown on cards and previews"
-              rows={compact ? 2 : 3}
-              maxLength={2000}
-              disabled={disabled}
-            />
-            <span className={styles.counter}>{values.description.length}/2000</span>
-          </label>
-
-          <label className={`${styles.field} ${styles.full}`}>
-            <span className={styles.label}>Full description</span>
-            <textarea
-              className={styles.textarea}
-              value={values.fullDescription}
-              onChange={(event) => update({ fullDescription: event.target.value })}
-              placeholder="The complete product story shown on the product page"
+              placeholder="The product story shown on cards and the product page"
               rows={compact ? 3 : 5}
               maxLength={20000}
               disabled={disabled}
             />
-            <span className={styles.counter}>{values.fullDescription.length}/20000</span>
+            <span className={styles.counter}>{values.description.length}/20000</span>
           </label>
         </div>
       </Section>

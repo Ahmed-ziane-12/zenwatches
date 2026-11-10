@@ -21,7 +21,6 @@ export interface ProductInput {
   price: number;
   currency: string;
   description: string | null;
-  full_description: string | null;
   badge: string | null;
   availability: ProductAvailability;
   stock: number | null;
@@ -114,8 +113,6 @@ export function toAdminProduct(row: Record<string, unknown>): AdminProduct {
     price: Number(row.price) || 0,
     currency: typeof row.currency === "string" && row.currency ? row.currency : "DA",
     description: typeof row.description === "string" ? row.description : null,
-    full_description:
-      typeof row.full_description === "string" ? row.full_description : null,
     badge: typeof row.badge === "string" ? row.badge : null,
     availability,
     stock: typeof row.stock === "number" ? row.stock : null,
@@ -204,8 +201,7 @@ export function parseProductInput(body: unknown): ParseResult {
       category: asText(source.category, 80) || "luxury",
       price,
       currency: asText(source.currency, 12) || "DA",
-      description: asOptionalText(source.description, 2000),
-      full_description: asOptionalText(source.full_description, 20000),
+      description: asOptionalText(source.description, 20000),
       badge: asOptionalText(source.badge, 120),
       availability,
       stock,

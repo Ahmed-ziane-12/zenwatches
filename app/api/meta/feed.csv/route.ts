@@ -67,7 +67,7 @@ export async function GET(request: Request) {
   const { data, error } = await getSupabase()
     .from("products")
     .select(
-      "id,name,description,full_description,price,image,images,stock,availability,brand,active",
+      "id,name,description,price,image,images,stock,availability,brand,active",
     )
     .eq("active", true)
     .order("sort_order", { ascending: true });
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
   const rows = (data ?? []).flatMap((product) => {
     const title = plainText(product.name);
     const description = plainText(
-      product.full_description || product.description,
+      product.description,
     ).slice(0, 4900);
     const image = absoluteImage(product.image || firstImage(product.images), site);
     const price = Number(product.price);
