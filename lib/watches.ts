@@ -101,6 +101,9 @@ export async function getAllWatches(): Promise<Product[]> {
     .from(TABLE)
     .select(COLUMNS)
     .eq("active", true)
+    // Admin-controlled order: smallest sort_order first, with id as a stable tiebreaker.
+    .order("sort_order", { ascending: true, nullsFirst: false })
+    .order("id", { ascending: true })
     .overrideTypes<ProductRow[], { merge: false }>();
 
   if (error) throw new Error(`Supabase query failed: ${error.message}`);

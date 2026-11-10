@@ -17,8 +17,9 @@ Supabase schema (no migrations were added).
 | D7 Purchase event | Browser + server, shared `purchase_<orderId>` | `components/ProductDetail/ProductDetail.tsx`, `app/[locale]/(main)/checkout/page.tsx`, `app/api/orders/route.ts` |
 | D8 DNS verification | Operational step | — |
 | D9 consent & security | Optional consent banner, hashed data, server-only tokens | `components/CookieConsent`, `lib/meta-consent.ts`, `lib/capi.ts` |
-| D10 QA | Checklist below | — |
-| D11 handover | This document | — |
+| D10 delivered event | Reporting-only `OrderDelivered`, sent once | `app/api/dashboard/orders/route.ts`, `lib/capi.ts` |
+| D11 QA | Checklist below | — |
+| D12 handover | This document | — |
 
 ## D0. Decisions to settle with the client
 
@@ -187,7 +188,43 @@ returns `eventId: purchase_<orderId>` to the browser.
   Rotate the CAPI token if it was ever shared in chat or email.
 - Ask for advertiser/task-based Meta access, not full admin, and enable 2FA.
 
-## D10. QA checklist
+## D10. Delivered-order reporting event (`OrderDelivered`)
+
+This is an **additional** custom event for revenue reporting. `Purchase` still fires at
+checkout exactly as before, with the same `event_id` and browser/server deduplication.
+`OrderDelivered` never feeds the Purchase optimisation event.
+
+- **When it fires:** only on the transition `status → delivered` from the dashboard.
+  It is not sent for orders that were already delivered, and not on other status edits.
+- **Exactly once:** the status update also sets `orders.meta_delivered_at`. The update
+  only matches while that column is `NULL`, so a repeat click, a second admin, or a
+  revert-and-redeliver cannot send a duplicate.
+- **Payload:** `value = grand_total` (shipping included, same as `Purchase`),
+  `currency = DZD`, `content_ids`/`contents` from `order_items`, hashed phone for
+  matching, `event_id = delivered_<orderId>`.
+- **Unconditional:** it is not gated by the `meta_consent` cookie, because that cookie
+  belongs to the customer's checkout request and is not available at delivery time.
+- **Match quality:** `orders` has no `fbp`/`fbc`, so matching relies on the phone.
+  Treat the event as reporting, not as an optimisation signal.
+
+**Run this migration before deploying the dashboard change**, or status updates to
+`delivered` will skip the event (the API falls back to a plain status update and logs a
+warning instead of failing):
+
+```sql
+alter table public.orders
+  add column if not exists meta_delivered_at timestamptz;
+```
+
+Optional: create a Custom Conversion from `OrderDelivered` in Events Manager if you want
+a delivered-only revenue metric.
+
+**Dashboard auth:** `/api/dashboard/*` now requires a signed `zw_admin` HttpOnly cookie,
+set by `POST /api/auth/signin` for admin and super_admin accounts and cleared by
+`POST /api/auth/signout`. Sessions last 7 days and are re-checked against `users.role`
+on every request. Anyone already signed in before this change must sign in again once.
+
+## D11. QA checklist
 
 - [ ] Feed returns `200` with the token, `403` without it.
 - [ ] Header row and all required columns are present.
@@ -199,12 +236,15 @@ returns `eventId: purchase_<orderId>` to the browser.
       currency.
 - [ ] `Purchase` appears with source **Browser** and **Server**, deduplicated.
 - [ ] A real mobile test order is saved in Supabase and counts one Purchase.
+- [ ] Moving an order to **Delivered** sends one `OrderDelivered` event; re-saving it
+      sends none.
+- [ ] Dashboard APIs return `401` without the admin cookie.
 - [ ] Reloading the confirmation screen does not add another Purchase.
 - [ ] Catalog diagnostics show events matched to items.
 - [ ] Ad preview link works on mobile and keeps UTM parameters.
 - [ ] `META_TEST_EVENT_CODE` is removed from production.
 
-## D11. Handover and monitoring
+## D12. Handover and monitoring
 
 - Feed URL: `https://<domain>/api/meta/feed.csv?token=<token>`
 - Data mapping: see D1 above.

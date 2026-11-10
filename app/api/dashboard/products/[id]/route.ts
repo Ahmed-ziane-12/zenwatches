@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 import {
   PRODUCT_IMAGE_BUCKET,
   normalizeImages,
@@ -19,6 +20,9 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { id: rawId } = await params;
   const id = parseId(rawId);
   if (id === null) {
@@ -55,6 +59,9 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { id: rawId } = await params;
   const id = parseId(rawId);
   if (id === null) {
@@ -99,6 +106,9 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { id: rawId } = await params;
   const id = parseId(rawId);
   if (id === null) {

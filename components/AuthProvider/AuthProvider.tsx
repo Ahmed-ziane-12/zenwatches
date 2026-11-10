@@ -72,6 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = () => {
     setUser(null);
     persistUser(null);
+    // Drop the HttpOnly admin cookie too, or dashboard APIs stay authorized until it expires.
+    void fetch("/api/auth/signout", { method: "POST" }).catch(() => {});
   };
 
   const value: AuthContextValue = {

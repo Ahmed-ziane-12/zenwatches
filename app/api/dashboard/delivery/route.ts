@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 import { loadDelivery } from "@/lib/delivery-data";
 
 export const runtime = "nodejs";
@@ -39,6 +40,9 @@ function normalizePrice(value: unknown): number | null {
 }
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const data = await loadDelivery();
     return NextResponse.json(data, { status: 200 });
@@ -49,6 +53,9 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await request.json();
     const wilaya = typeof body?.wilaya === "string" ? body.wilaya.trim() : "";
