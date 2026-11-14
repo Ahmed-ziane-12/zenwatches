@@ -21,7 +21,8 @@ type TestimonialTag =
   | "testimonials.tag.delivery"
   | "testimonials.tag.wrist"
   | "testimonials.tag.gift"
-  | "testimonials.tag.voice";
+  | "testimonials.tag.voice"
+  | "testimonials.tag.client";
 
 type Testimonial = {
   src: string;
@@ -31,55 +32,62 @@ type Testimonial = {
 };
 
 /**
- * Real client conversations. The files live in /public/testimonials.
- * The order below is intentional: the strongest message is the hero.
+ * Per-file caption and crop metadata for screenshots we know. Files uploaded
+ * later through the dashboard still work and get a neutral caption.
  */
-const TESTIMONIALS: Testimonial[] = [
-  {
-    src: "/testimonials/IMG_20261106_182130_406.jpg",
+const KNOWN_TESTIMONIALS: Record<string, Omit<Testimonial, "src">> = {
+  "IMG_20261106_182130_406.jpg": {
     tagKey: "testimonials.tag.thankYou",
     position: "50% 40%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182129_999.jpg",
+  "IMG_20261106_182129_999.jpg": {
     tagKey: "testimonials.tag.wrist",
     position: "50% 45%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182130_368.jpg",
+  "IMG_20261106_182130_368.jpg": {
     tagKey: "testimonials.tag.gift",
     position: "50% 40%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182130_474.jpg",
+  "IMG_20261106_182130_474.jpg": {
     tagKey: "testimonials.tag.delivery",
     position: "50% 40%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182129_817.jpg",
+  "IMG_20261106_182129_817.jpg": {
     tagKey: "testimonials.tag.delivery",
     position: "50% 0%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182130_298.jpg",
+  "IMG_20261106_182130_298.jpg": {
     tagKey: "testimonials.tag.voice",
     position: "50% 40%",
   },
-  {
-    src: "/testimonials/IMG_20261106_182129_808.jpg",
+  "IMG_20261106_182129_808.jpg": {
     tagKey: "testimonials.tag.voice",
     position: "50% 0%",
   },
-];
+};
 
-const TOTAL = TESTIMONIALS.length;
+function buildTestimonials(images: string[]): Testimonial[] {
+  return images.map((src) => {
+    const fileName = decodeURIComponent(src.split("/").pop() ?? "");
+    const meta = KNOWN_TESTIMONIALS[fileName];
+    return {
+      src,
+      tagKey: meta?.tagKey ?? "testimonials.tag.client",
+      position: meta?.position ?? "50% 40%",
+    };
+  });
+}
 
 function pad(value: number): string {
   return String(value).padStart(2, "0");
 }
 
-export default function Testimonials() {
+export default function Testimonials({ images }: { images: string[] }) {
   const { t } = useLanguage();
+  // The screenshots are listed from the Supabase "testimonials" bucket by the home page.
+  const TESTIMONIALS = buildTestimonials(images);
+  const TOTAL = TESTIMONIALS.length;
+
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [zoomed, setZoomed] = useState(false);
@@ -125,10 +133,15 @@ export default function Testimonials() {
     }
   };
 
+  // Keep the selection valid if the folder contents change between renders.
+  useEffect(() => {
+    setActive((index) => (TOTAL === 0 ? 0 : Math.min(index, TOTAL - 1)));
+    setLightbox((index) => (index !== null && index >= TOTAL ? null : index));
+  }, [TOTAL]);
+
   // Keyboard navigation for the full-screen view.
   useEffect(() => {
     if (!isLightboxOpen) return;
-
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -162,6 +175,9 @@ export default function Testimonials() {
       document.body.style.overflow = previousOverflow;
     };
   }, [isLightboxOpen]);
+
+  // No screenshots uploaded yet: hide the section instead of an empty gallery.
+  if (TOTAL === 0) return null;
 
   return (
     <section className={styles.section} aria-labelledby="testimonials-title">

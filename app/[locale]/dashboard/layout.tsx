@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import {
   Home,
+  MessageSquareQuote,
   Package,
   ShoppingCart,
   LogOut,
@@ -106,6 +107,15 @@ export default function DashboardLayout({
               <Package size={17} />
             </span>
             <span>Products</span>
+          </Link>
+          <Link
+            href={`${basePath}/testimonials`}
+            className={`${styles.navLink} ${pathname.includes("/testimonials") ? styles.navLinkActive : ""}`}
+          >
+            <span className={styles.navIcon}>
+              <MessageSquareQuote size={17} />
+            </span>
+            <span>Testimonials</span>
           </Link>
           <Link
             href={`${basePath}/delivery`}

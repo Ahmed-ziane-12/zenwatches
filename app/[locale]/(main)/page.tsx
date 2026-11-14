@@ -8,6 +8,7 @@ import Testimonials from "@/components/Testimonials/Testimonials";
 import TopBrands from "@/components/TopBrands/TopBrands";
 import { buildColumns, COLUMN_COUNT, sampleProducts, WATCHES_PER_COLUMN, type Product } from "@/lib/products";
 import { getBestSellers, getRandomWatches, getTopBrands, shuffle, type BrandSummary } from "@/lib/watches";
+import { listTestimonialImages } from "@/lib/testimonials";
 import HomeClient from "@/components/HomeClient";
 
 // Pick a new random set on every visit. To reuse one set for a minute instead (fewer database
@@ -45,6 +46,7 @@ export default async function Home() {
   const watches = await loadHeroWatches();
   const bestSellers = await getBestSellers(6);
   const brands = await loadTopBrands();
+  const testimonials = await listTestimonialImages();
   return (
     <div className="wrapper">
       <Hero columns={buildColumns(watches)} />
@@ -52,7 +54,7 @@ export default async function Home() {
       <PromoBanners />
       <BestSellers products={bestSellers} />
       <TopBrands brands={brands} />
-      <Testimonials />
+      <Testimonials images={testimonials.map((image) => image.url)} />
       <HomeClient />
       <Contact />
     </div>
