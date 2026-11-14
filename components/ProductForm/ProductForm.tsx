@@ -11,10 +11,6 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import {
-  AVAILABILITY_OPTIONS,
-  type ProductAvailability,
-} from "@/lib/product-admin";
 import { CATEGORY_OPTIONS, type ProductFormValues } from "@/lib/product-form";
 import styles from "./ProductForm.module.css";
 
@@ -23,12 +19,6 @@ type ProductFormProps = {
   onChange: (next: ProductFormValues) => void;
   disabled?: boolean;
   compact?: boolean;
-};
-
-const AVAILABILITY_LABELS: Record<ProductAvailability, string> = {
-  available: "Available",
-  limited: "Limited",
-  "sold-out": "Sold out",
 };
 
 function Section({
@@ -69,6 +59,9 @@ export default function ProductForm({
   const update = (patch: Partial<ProductFormValues>) => {
     onChange({ ...values, ...patch });
   };
+
+  const isSoldOut = values.availability === "sold-out";
+  const showsLowStockBadge = values.availability === "limited";
 
   const addColor = () => {
     const color = colorDraft.trim();
@@ -213,23 +206,54 @@ export default function ProductForm({
             />
           </label>
 
-          <label className={styles.field}>
-            <span className={styles.label}>Availability</span>
-            <select
-              className={styles.select}
-              value={values.availability}
-              onChange={(event) =>
-                update({ availability: event.target.value as ProductAvailability })
-              }
-              disabled={disabled}
-            >
-              {AVAILABILITY_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {AVAILABILITY_LABELS[option]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className={styles.field}>
+            <span className={styles.label}>Card badges</span>
+
+            <label className={styles.switchRow}>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={showsLowStockBadge}
+                className={`${styles.switch} ${showsLowStockBadge ? styles.switchOn : ""}`}
+                onClick={() =>
+                  update({ availability: showsLowStockBadge ? "available" : "limited" })
+                }
+                disabled={disabled || isSoldOut}
+              >
+                <span className={styles.switchKnob} />
+              </button>
+              <span className={styles.switchText}>
+                <strong>
+                  {showsLowStockBadge ? "Low-stock badge: on" : "Low-stock badge: off"}
+                </strong>
+                <small>
+                  When on, the card shows “Only 1 left” / “Only 2 left” for stock of 1 or 2.
+                </small>
+              </span>
+            </label>
+
+            <label className={styles.switchRow}>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isSoldOut}
+                className={`${styles.switch} ${isSoldOut ? styles.switchOn : ""}`}
+                onClick={() =>
+                  update({ availability: isSoldOut ? "available" : "sold-out" })
+                }
+                disabled={disabled}
+              >
+                <span className={styles.switchKnob} />
+              </button>
+              <span className={styles.switchText}>
+                <strong>{isSoldOut ? "Sold-out badge: on" : "Sold-out badge: off"}</strong>
+                <small>
+                  Always shown when sold out. It also appears automatically when stock
+                  reaches 0.
+                </small>
+              </span>
+            </label>
+          </div>
 
           <label className={styles.field}>
             <span className={styles.label}>Sort order</span>

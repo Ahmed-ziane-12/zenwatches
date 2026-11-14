@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { COLUMN_MOTION, formatPrice, type Product } from "@/lib/products";
+import { COLUMN_MOTION, formatPrice, isProductSoldOut, type Product } from "@/lib/products";
 import { useCart } from "../CartProvider";
 import { useLanguage } from "../LanguageProvider";
 import ProductImage from "../ProductImage/ProductImage";
@@ -15,8 +15,7 @@ function Tile({ product, clone = false }: { product: Product; clone?: boolean })
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const stock = typeof product.stock === "number" ? product.stock : null;
-  const soldOut = stock !== null ? stock <= 0 : product.availability === "sold-out";
+  const soldOut = isProductSoldOut(product);
 
   function onAdd() {
     if (soldOut) return;

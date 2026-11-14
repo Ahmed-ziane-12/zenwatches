@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Product } from "@/lib/products";
+import { isProductSoldOut, Product } from "@/lib/products";
 import { useCart } from "@/components/CartProvider";
 import OrderForm, { OrderFormData } from "@/components/OrderForm/OrderForm";
 import styles from "./ProductDetail.module.css";
@@ -39,8 +39,7 @@ export default function ProductDetail({ product, delivery }: ProductDetailProps)
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
 
-  const soldOut =
-    typeof p.stock === "number" ? p.stock <= 0 : p.availability === "sold-out";
+  const soldOut = isProductSoldOut(product);
 
   const productSpecs = useMemo<Record<string, string> | null>(() => {
     const source =

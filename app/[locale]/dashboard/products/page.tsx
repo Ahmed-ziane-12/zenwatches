@@ -29,7 +29,7 @@ import {
 } from "@/lib/product-form";
 import styles from "./products.module.css";
 
-type FilterKey = "all" | "active" | "hidden" | "low" | "out";
+type FilterKey = "all" | "active" | "hidden" | "limited" | "low" | "out";
 
 function formatPrice(value: number, currency: string) {
   return `${Number(value || 0).toLocaleString()} ${currency || "DA"}`;
@@ -47,6 +47,11 @@ function isOut(product: AdminProduct) {
 function isLow(product: AdminProduct) {
   const stock = stockOf(product);
   return stock !== null && stock > 0 && stock <= 5;
+}
+
+/** The low-stock count badge is opt-in from the dashboard. */
+function isLowStockBadgeEnabled(product: AdminProduct) {
+  return product.availability === "limited" && !isOut(product);
 }
 
 export default function ProductsPage() {
@@ -113,6 +118,7 @@ export default function ProductsPage() {
       all: products.length,
       active: products.filter((product) => product.active).length,
       hidden: products.filter((product) => !product.active).length,
+      limited: products.filter(isLowStockBadgeEnabled).length,
       low: products.filter(isLow).length,
       out: products.filter(isOut).length,
     };
@@ -123,6 +129,7 @@ export default function ProductsPage() {
     return products.filter((product) => {
       if (filter === "active" && !product.active) return false;
       if (filter === "hidden" && product.active) return false;
+      if (filter === "limited" && !isLowStockBadgeEnabled(product)) return false;
       if (filter === "low" && !isLow(product)) return false;
       if (filter === "out" && !isOut(product)) return false;
       if (!q) return true;
@@ -335,7 +342,8 @@ export default function ProductsPage() {
                 ["all", "All"],
                 ["active", "Visible"],
                 ["hidden", "Hidden"],
-                ["low", "Low stock"],
+                ["limited", "Low-stock badge"],
+                ["low", "Low stock (≤5)"],
                 ["out", "Sold out"],
               ] as Array<[FilterKey, string]>
             ).map(([key, label]) => (
@@ -419,6 +427,7 @@ export default function ProductsPage() {
               <tbody>
                 {filteredProducts.map((product) => {
                   const out = isOut(product);
+                  const limited = isLowStockBadgeEnabled(product);
                   const low = isLow(product);
                   return (
                     <tr
@@ -473,6 +482,9 @@ export default function ProductsPage() {
                             {product.active ? <Eye size={12} /> : <EyeOff size={12} />}
                             {product.active ? "Visible" : "Hidden"}
                           </span>
+                          {limited && (
+                            <span className={styles.statusChipWarning}>Low-stock badge</span>
+                          )}
                           {out && <span className={styles.statusChipDanger}>Sold out</span>}
                         </div>
                       </td>

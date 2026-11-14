@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin-auth";
 import { parseProductInput, toAdminProduct } from "@/lib/product-admin";
+import { persistAvailability, revalidateStorefront } from "@/lib/product-write";
 
 export const dynamic = "force-dynamic";
 
@@ -60,8 +61,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
     }
 
+    let row = data as Record<string, unknown>;
+
+    // The stock trigger may have overwritten the admin's availability choice.
+    if (row.availability !== parsed.data.availability) {
+      const applied = await persistAvailability(
+        supabase,
+        Number(row.id),
+        parsed.data.availability,
+      );
+      if (applied.error) {
+        console.error("[api/dashboard/products] availability error:", applied.error);
+        return NextResponse.json(
+          { error: "Product saved, but its availability could not be set" },
+          { status: 500 },
+        );
+      }
+      if (applied.row) row = applied.row;
+    }
+
+    revalidateStorefront();
+
     return NextResponse.json(
-      { product: toAdminProduct(data as Record<string, unknown>) },
+      { product: toAdminProduct(row) },
       { status: 201 },
     );
   } catch (error) {

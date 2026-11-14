@@ -52,6 +52,36 @@ export interface Product {
   category?: string | null;
 }
 
+type StockFields = Pick<Product, "stock" | "availability">;
+
+/** Reads stock whether it arrives as a number or a numeric string. */
+export function productStockOf(product: Pick<Product, "stock">): number | null {
+  const value = product.stock as unknown;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+/**
+ * Sold out is authoritative: either the admin marked it sold out, or the stock
+ * count reached zero. The badge must show in both cases.
+ */
+export function isProductSoldOut(product: StockFields): boolean {
+  if (product.availability === "sold-out") return true;
+  const stock = productStockOf(product);
+  return stock !== null && stock <= 0;
+}
+
+/** The low-stock count badge is opt-in from the dashboard, never inferred from stock. */
+export function isProductLowStock(product: StockFields): boolean {
+  if (product.availability !== "limited" || isProductSoldOut(product)) return false;
+  const stock = productStockOf(product);
+  return stock !== null && stock > 0 && stock < 3;
+}
+
 /** Scroll settings for one hero column. `dur` is seconds per loop; `delay` offsets the start. */
 export interface ColumnMotion {
   dir: "down" | "up";

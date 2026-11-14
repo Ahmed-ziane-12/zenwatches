@@ -3,7 +3,7 @@ import React from 'react'
 import styles from './ProductCard.module.css'
 import { useCart } from '../CartProvider';
 import { useLanguage } from '../LanguageProvider';
-import { formatPrice, Product } from '@/lib/products';
+import { formatPrice, isProductLowStock, isProductSoldOut, productStockOf, Product } from '@/lib/products';
 import ProductImage from '../ProductImage/ProductImage';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
@@ -21,9 +21,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return null;
   }
 
-  const stock = p.stock !== undefined && p.stock !== null ? Number(p.stock) : null;
-  const isOutOfStock = stock !== null ? stock <= 0 : p.availability === "sold-out";
-  const isLowStock = stock !== null && stock > 0 && stock < 3;
+  const stock = productStockOf(product);
+  const isOutOfStock = isProductSoldOut(product);
+  const isLowStock = isProductLowStock(product);
   const brand = p.brand || t("productCard.noBrand");
 
   const handleAddToCart = (e: React.MouseEvent) => {

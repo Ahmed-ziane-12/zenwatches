@@ -43,11 +43,20 @@ function absoluteImage(raw: unknown, site: string): string {
 }
 
 function availabilityOf(product: { stock: unknown; availability: unknown }): string {
-  const stock = Number(product.stock);
-  if (Number.isFinite(stock)) {
-    return stock > 0 ? "in stock" : "out of stock";
-  }
-  return product.availability === "sold-out" ? "out of stock" : "in stock";
+  // An explicit sold-out state wins even if a stock number was left over.
+  if (product.availability === "sold-out") return "out of stock";
+
+  const raw = product.stock;
+  const stock =
+    typeof raw === "number"
+      ? raw
+      : typeof raw === "string" && raw.trim() !== ""
+        ? Number(raw)
+        : null;
+
+  // Empty stock means unlimited, matching the dashboard form.
+  if (stock === null || !Number.isFinite(stock)) return "in stock";
+  return stock > 0 ? "in stock" : "out of stock";
 }
 
 export async function GET(request: Request) {

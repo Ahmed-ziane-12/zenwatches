@@ -8,6 +8,7 @@ import {
   storagePathFromUrl,
   toAdminProduct,
 } from "@/lib/product-admin";
+import { persistAvailability, revalidateStorefront } from "@/lib/product-write";
 
 export const dynamic = "force-dynamic";
 
@@ -92,8 +93,28 @@ export async function PUT(
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
+    let row = data as Record<string, unknown>;
+
+    // The stock trigger may have overwritten the admin's availability choice.
+    if (row.availability !== parsed.data.availability) {
+      const applied = await persistAvailability(supabase, id, parsed.data.availability);
+      if (applied.error) {
+        console.error(
+          "[api/dashboard/products/:id] availability error:",
+          applied.error,
+        );
+        return NextResponse.json(
+          { error: "Product saved, but its availability could not be set" },
+          { status: 500 },
+        );
+      }
+      if (applied.row) row = applied.row;
+    }
+
+    revalidateStorefront();
+
     return NextResponse.json(
-      { product: toAdminProduct(data as Record<string, unknown>) },
+      { product: toAdminProduct(row) },
       { status: 200 },
     );
   } catch (error) {
@@ -161,6 +182,8 @@ export async function DELETE(
         console.warn("[api/dashboard/products/:id] storage cleanup failed:", storageError);
       }
     }
+
+    revalidateStorefront();
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
